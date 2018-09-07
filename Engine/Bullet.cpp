@@ -2,65 +2,73 @@
 
 void Bullet::draw(Graphics & gfx)
 {
-	if (underway)
-	{
-		gfx.drawCircle(int(pos.x), int(pos.y),int(radius), 0, c);
-	}
-	if (showHitAnimation)
-	{
-   		gfx.drawCircle(int(pos.x), int(pos.y), int(radiusHit), 0, colorHit);
-	}
-
+	gfx.drawCircle(int(pos.x), int(pos.y),int(radius), 0, c);
 }
 
-void Bullet::updateHitAnimationCounter(float dt)
-{
-	hitAnimationCounter += dt;
-	if (hitAnimationCounter >= hitAnimationTime)
-	{
-		showHitAnimation = false;
-	}
-	
-}
 
-void Bullet::updatePos(float dt)
+
+bool Bullet::updatePosCheckScreen(float dt)
 {
 	pos = pos + direction * dt * speed;
-	if (pos.outsideScreen(radiusHit))
-	{
-		underway = false;
-		showHitAnimation = false;
-	}
+	return pos.outsideScreen(radiusHit);
+
 }
 
-void Bullet::init(Vec2 pos_in, Vec2 direction_in, Origin origin_in)
+Vec2 Bullet::getPos()
 {
-	origin = origin_in;
+	return pos;
+}
+
+Bullet::Bullet(PDVec pdVec_in, Origin origin_in, Bullet * nextBulletPtr_in)
+	:
+	nextBulletPtr(nextBulletPtr_in),
+	pos (pdVec_in.pos),
+	direction (pdVec_in.direction),
+	origin (origin_in)
+{
 	switch (origin)
 	{
 	case Origin::player:
 		speed = 400;
 		radius = 2.0f;
 		c = Colors::White;
-		colorHit = Colors::Red;
 		break;
 
 	case Origin::alien:
 		speed = 400;
 		radius = 2.0f;
 		c = Colors::Green;
-		colorHit = Colors::Red;
 		break;
 	}
-	pos = pos_in;
-	direction = direction_in;
-	underway = true;
 }
 
-
-Vec2 Bullet::getPos()
+Bullet::~Bullet()
 {
-	return pos;
+	delete nextBulletPtr;
+}
+
+Bullet * Bullet::separate()
+{
+	Bullet* temp = nextBulletPtr;
+	nextBulletPtr = nullptr;
+	return temp;
+}
+
+void Bullet::reLink(Bullet * toReplace, Bullet * replaceWith)
+{
+	if (nextBulletPtr == toReplace)
+	{
+		nextBulletPtr = replaceWith;
+	}
+	else if (nextBulletPtr != 0)
+	{
+		nextBulletPtr->reLink(toReplace, replaceWith);
+	}
+}
+
+Bullet * Bullet::getNext()
+{
+	return nextBulletPtr;
 }
 
 

@@ -3,6 +3,7 @@
 #include "Graphics.h"
 #include "Colors.h"
 #include "Asteroid.h"
+#include "PDVec.h"
 
 class Bullet
 
@@ -11,10 +12,9 @@ private:
 	Vec2 pos;
 	Vec2 direction;
 	float speed;
-	
 	Color c;
 	float radiusHit = 4.0f;
-	Color colorHit;
+	Bullet* nextBulletPtr = nullptr;
 
 public:	
 enum class Origin
@@ -24,15 +24,15 @@ enum class Origin
 };
 Origin origin;
 static constexpr int damageOnHit = 5;
-bool underway = false;
-bool showHitAnimation = false;
-float hitAnimationCounter = 0.0f;
-static constexpr float hitAnimationTime = 0.1f;
 void draw(Graphics& gfx);
 void updateHitAnimationCounter(float dt);
-void updatePos(float dt);
-void init(Vec2 pos_in, Vec2 direction_in, Origin origin_in);
+bool updatePosCheckScreen(float dt);
 Vec2 getPos();
 float radius;
+Bullet(PDVec pdVec_in, Origin origin_in, Bullet* nextBulletPtr_in);
+~Bullet();
+Bullet* separate();
+void reLink(Bullet* toReplace, Bullet* replaceWith);
+Bullet* getNext();
 
 };

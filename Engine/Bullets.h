@@ -12,12 +12,14 @@
 class Bullets
 {
 private:
-	static constexpr int maxBullets = 100;
-	Bullet bullets[maxBullets];
+
+	Bullet* topBulletPtr = nullptr;
+	void deleteBullet(Bullet* toDelete);
 
 public:
 	void launchBullet(PDVec newBullet_in, Bullet::Origin origin_in);
 	void updateBullets(float dt, Timer& timer, Field& field, Rocket& rocket, Alien& alien);
 	void draw(Graphics& gfx);
-	bool noUnderway();
+	
+
 };

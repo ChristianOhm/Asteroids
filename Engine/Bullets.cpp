@@ -1,74 +1,81 @@
 #include "Bullets.h"
+#include <assert.h>
 
 void Bullets::launchBullet(PDVec newBullet_in, Bullet::Origin origin_in)
 {
-	for (int counter = 0; counter < maxBullets; ++counter)
-	{
-		if (!bullets[counter].underway)
-		{
-			bullets[counter].init(newBullet_in.pos, newBullet_in.direction, origin_in);
-			break;
-		}
-	}
+	topBulletPtr = new Bullet(newBullet_in, origin_in, topBulletPtr);
 }
 
 void Bullets::updateBullets(float dt, Timer & timer, Field& field, Rocket& rocket, Alien& alien)
 {
-	for (int counter = 0; counter < maxBullets; ++counter)
+	Bullet* nextBullet = topBulletPtr;
+
+	while (nextBullet != nullptr)
 	{
-		bullets[counter].updatePos(dt);
-		if (bullets[counter].showHitAnimation)
+		Bullet* currentBullet = nextBullet;
+		nextBullet = currentBullet->getNext();
+		bool stop = false;
+
+		if (currentBullet->updatePosCheckScreen(dt))
 		{
-			bullets[counter].updateHitAnimationCounter(dt);
+			stop = true;
+			deleteBullet(currentBullet);
 		}
-		if (bullets[counter].underway)
-		{
-			
-			if (field.checkHit(bullets[counter].getPos()))
-			{
-				bullets[counter].underway = false;
-				bullets[counter].showHitAnimation = true;
-			}
-			if (alien.underway && bullets[counter].origin == Bullet::Origin::player && alien.checkBulletHit(bullets[counter].getPos()))
-			{
-				bullets[counter].underway = false;
-				bullets[counter].showHitAnimation = true;
-			}
-			if (bullets[counter].origin == Bullet::Origin::alien &&
-				rocket.testSphereCollision(bullets[counter].getPos(), bullets[counter].radius))
-			{
-				bullets[counter].underway = false;
-				bullets[counter].showHitAnimation = true;
-				rocket.takingDamage(Bullet::damageOnHit, timer);
-				
-
-
-			}
 		
+		if (!stop && field.checkHit(currentBullet->getPos()))
+		{
+			stop = true;
+			deleteBullet(currentBullet);
+		}
+		
+		if (!stop && alien.underway && currentBullet->origin == Bullet::Origin::player
+			&& alien.checkBulletHit(currentBullet->getPos()))
+		{
+			stop = true;
+			deleteBullet(currentBullet);
+		}
+
+		if (!stop && currentBullet->origin == Bullet::Origin::alien 
+			&& rocket.testSphereCollision(currentBullet->getPos(), currentBullet->radius))
+		{
+			stop = true;
+			deleteBullet(currentBullet);
+			rocket.takingDamage(Bullet::damageOnHit, timer);
 
 		}
-	}
+	} 
+
 }
 
 void Bullets::draw(Graphics & gfx)
 {
-	for (int counter = 0; counter < maxBullets; ++counter)
+	
+ 	for (Bullet* currentBullet = topBulletPtr; currentBullet != 0; currentBullet = currentBullet->getNext())
 	{
-		if (bullets[counter].underway || bullets[counter].showHitAnimation)
-		{
-			bullets[counter].draw(gfx);
-		}
+		currentBullet->draw(gfx);
 	}
+
+
 }
 
-bool Bullets::noUnderway()
+
+void Bullets::deleteBullet(Bullet * toDelete)
 {
-	for (int counter = 0; counter < maxBullets; ++counter)
+	assert(toDelete != 0);
+	Bullet* oldNext = toDelete->separate();
+	if (toDelete == topBulletPtr)
 	{
-		if (bullets[counter].underway)
-		{
-			return false;
-		}
+		topBulletPtr = oldNext;
+		delete toDelete;
 	}
-	return true;
+	else
+	{
+		topBulletPtr->reLink(toDelete, oldNext);
+		delete toDelete;
+	}
+	
+	
+	
+	
+
 }
