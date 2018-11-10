@@ -3,13 +3,12 @@
 
 
 
-void Asteroid::init(Vec2 pos_in, Vec2 direction_in, Size size_in, int identifier_in, float speedModifier)
+Asteroid::Asteroid(Vec2 pos_in, Vec2 direction_in, Size size_in, int identifier_in, float speedModifier)
 {
 	pos = pos_in;
 	identifier = identifier_in;
 	lastCollision = 999; //initialize to collision with wall
 	direction = direction_in;
-	destroyed = false;
 	size = size_in;
 	switch (size_in)
 	{
@@ -34,16 +33,11 @@ void Asteroid::init(Vec2 pos_in, Vec2 direction_in, Size size_in, int identifier
 		mass = 500.0f;
 		damageOnHit = 10;
 		break;
-	case Size::virtualAsteroid:
-		radius = Rocket::halfLength;
-		hitpoints = 999;
-		speed = 100.0f;
-		mass = 400.0f;
 	}
 	direction = direction * speed;
 }
 
-void Asteroid::draw(Graphics & gfx)
+void Asteroid::draw(Graphics & gfx) const
 {
 	switch (size)
 	{
@@ -114,12 +108,12 @@ bool Asteroid::collideAsteroid(Asteroid & otherAsteroid)
 	}
 }
 
-Vec2 Asteroid::getPos()
+Vec2 Asteroid::getPos() const
 {
 	return pos;
 }
 
-Vec2 Asteroid::getDirection()
+Vec2 Asteroid::getDirection() const
 {
 	return direction;
 }
@@ -129,19 +123,19 @@ void Asteroid::setDirection(Vec2 newDirection)
 	direction = newDirection;
 }
 
-float Asteroid::getSpeed()
+float Asteroid::getSpeed() const
 {
 	return speed;
 }
 
 
 
-float Asteroid::getRadius()
+float Asteroid::getRadius() const
 {
 	return radius;
 }
 
-float Asteroid::getMass()
+float Asteroid::getMass() const
 {
 	return mass;
 }
@@ -224,7 +218,7 @@ void Asteroid::SetLastCollision(int identifier)
 	lastCollision = identifier;
 }
 
-bool Asteroid::collideAlien(const Vec2 & alienPos, float alienWidth, float alienHeight)
+bool Asteroid::collideAlien(const Vec2 & alienPos, float alienWidth, float alienHeight) const
 {
 	float alienRight = alienPos.x + alienWidth;
 	float alienLeft = alienPos.x - alienWidth;

@@ -16,19 +16,17 @@ public:
 		tiny,
 		medium,
 		large,
-		virtualAsteroid
 	};
-	void init(Vec2 pos_in, Vec2 direction_in, Size size_in, int identifier_in, float speedModifier);
-	void draw(Graphics& gfx);
-	bool destroyed = true;
+	Asteroid (Vec2 pos_in, Vec2 direction_in, Size size_in, int identifier_in, float speedModifier);
+	void draw(Graphics& gfx) const;
 	bool updatePos(float dt);
 	bool collideAsteroid(Asteroid& otherAsteroid);
-	Vec2 getPos();
-	Vec2 getDirection();
+	Vec2 getPos() const;
+	Vec2 getDirection() const;
 	void setDirection(Vec2 newDirection);
-	float getSpeed();
-	float getRadius();
-	float getMass();
+	float getSpeed() const;
+	float getRadius() const;
+	float getMass() const;
 	void bounceFromAsteroid(Asteroid& otherAsteroid);
 	void bounceFromRocket(Rocket& rocket);
 	int hitpoints;
@@ -40,7 +38,7 @@ public:
 	int getIdentifier();
 	int getLastCollision();
 	void SetLastCollision(int identifier);
-	bool collideAlien(const Vec2& alienPos, float alienWidth, float alienHeight);
+	bool collideAlien(const Vec2& alienPos, float alienWidth, float alienHeight) const;
 	int damageOnHit;
 	
 

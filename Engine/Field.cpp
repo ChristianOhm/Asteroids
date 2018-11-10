@@ -5,7 +5,6 @@
 void Field::doAsteroidDestruction(Asteroid& asteroid)
 {
 
-	asteroid.destroyed = true;
 	if (!(asteroid.size == Asteroid::Size::tiny))
 	{
 		float startAngle = angle(rng);
@@ -45,29 +44,28 @@ void Field::doAsteroidDestruction(Asteroid& asteroid)
 
 }
 
-void Field::generateNewAsteroid(Vec2 & pos, Vec2 & direction, Asteroid::Size & size)
+void Field::deleteAsteroid(int index)
 {
-	for (int counter = 0; counter < maxAsteroids; ++counter)
-	{
-		if (asteroids[counter].destroyed)
-		{
-			asteroids[counter].init(pos, direction, size, counter, speedModifier);
-break;
-		}
-	}
+	std::swap(asteroids[index], asteroids.back());
+	asteroids.pop_back();
+}
+
+void Field::generateNewAsteroid(Vec2 & pos, Vec2 & direction, Asteroid::Size size)
+{
+	asteroids.push_back(Asteroid(pos, direction, size, asteroids.size(), speedModifier));
 }
 
 void Field::checkAsteroidsHitpoints()
 {
 
-	for (int counter = 0; counter < maxAsteroids; ++counter)
+	for (int counter = 0; counter < asteroids.size(); ++counter)
 	{
-		if (!asteroids[counter].destroyed && asteroids[counter].hitpoints <= 0)
+		if (asteroids[counter].hitpoints <= 0)
 		{
 			doAsteroidDestruction(asteroids[counter]);
+			deleteAsteroid(counter);
 		}
-	}
-
+	}	
 }
 
 Field::Field()
@@ -84,32 +82,22 @@ void Field::updateAsteroids(float dt)
 
 	checkAsteroidsHitpoints();
 
-	for (int counter = 0; counter < maxAsteroids - 1; ++counter)
+	for (Asteroid& A : asteroids)
 	{
-		if (!asteroids[counter].destroyed)
-		{
-			if (asteroids[counter].updatePos(dt))
-			{
-				//wallCollideSound.Play(rng);
-			}
+		A.updatePos(dt);
 
-		}
 	}
 
-
-	for (int counter = 0; counter < maxAsteroids; ++counter)
+	for (int counter = 0; counter < asteroids.size(); ++counter)
 	{
-		if (!asteroids[counter].destroyed)
+		for (int counter2 = counter + 1; counter2 < asteroids.size(); ++counter2)
 		{
-			for (int counter2 = counter + 1; counter2 < maxAsteroids; ++counter2)
-			{
-				if (!asteroids[counter2].destroyed && asteroids[counter].collideAsteroid(asteroids[counter2]))
+				if (asteroids[counter].collideAsteroid(asteroids[counter2]))
 				{
 					asteroids[counter].bounceFromAsteroid(asteroids[counter2]);
 					collisionSound.Play(rng);
 					break;
 				}
-			}
 		}
 	}
 
@@ -117,45 +105,40 @@ void Field::updateAsteroids(float dt)
 
 void Field::draw(Graphics & gfx)
 {
-	for (int counter = 0; counter < maxAsteroids; ++counter)
+	for (const Asteroid& A : asteroids)
 	{
-		if (!asteroids[counter].destroyed)
-		{
-			asteroids[counter].draw(gfx);
-		}
-	}
+		A.draw(gfx);
 
+	}
 }
 
 bool Field::checkHit(Vec2 & posBullet)
 {
-
-	for (int counter = 0; counter < maxAsteroids; ++counter)
+	for (Asteroid& A : asteroids)
 	{
-		if (!asteroids[counter].destroyed && asteroids[counter].checkBulletCollision(posBullet))
+		if (A.checkBulletCollision(posBullet))
 		{
 
-			--asteroids[counter].hitpoints;
+			--A.hitpoints;
 			return true;
-
 		}
-	}
 
+	}
 	return false;
 }
 
 void Field::testRocketAsteroidCollision(Rocket & rocket, Timer & timer)
 {
 	bool noCollision = true;
-	for (int counter = 0; counter < maxAsteroids; ++counter)
+	for (Asteroid& A : asteroids)
 	{
-		if (!asteroids[counter].destroyed && rocket.testSphereCollision(asteroids[counter].getPos(), asteroids[counter].getRadius()))
+		if (rocket.testSphereCollision(A.getPos(), A.getRadius()))
 		{
-			asteroids[counter].bounceFromRocket(rocket);
-			if (rocket.lastCollision != asteroids[counter].getIdentifier())
+			A.bounceFromRocket(rocket);
+			if (rocket.lastCollision != A.getIdentifier())
 			{
-				rocket.takingDamage(asteroids[counter].damageOnHit, timer);
-				rocket.lastCollision = asteroids[counter].getIdentifier();
+				rocket.takingDamage(A.damageOnHit, timer);
+				rocket.lastCollision = A.getIdentifier();
 			}
 
 
@@ -173,42 +156,40 @@ void Field::checkAlienPath(const Vec2& alienPos, bool& collisionAhead, Vec2& eva
 {
 
 	float alienLeft = (alienPos.x - Alien::halfWidth);
-
-	for (int counter = 0; counter < maxAsteroids; ++counter)
+	for (const Asteroid& A : asteroids)
 	{
-		if (!asteroids[counter].destroyed)
+		float asteroidRight = (A.getPos()).x + A.getRadius();
+		if (alienLeft - asteroidRight > 0 && alienLeft - asteroidRight < Alien::safetyX)
 		{
-			float asteroidRight = (asteroids[counter].getPos()).x + asteroids[counter].getRadius();
-			if (alienLeft - asteroidRight > 0 && alienLeft - asteroidRight < Alien::safetyX)
+			float alienTop = alienPos.y - Alien::halfHeight - Alien::safetyY;
+			float alienBottom = alienPos.y + Alien::halfHeight + Alien::safetyY;
+			float asteroidTop = (A.getPos()).y - A.getRadius();
+			float asteroidBottom = (A.getPos()).y + A.getRadius();
+			if (asteroidBottom > alienTop && asteroidTop < alienBottom)
 			{
-				float alienTop = alienPos.y - Alien::halfHeight - Alien::safetyY;
-				float alienBottom = alienPos.y + Alien::halfHeight + Alien::safetyY;
-				float asteroidTop = (asteroids[counter].getPos()).y - asteroids[counter].getRadius();
-				float asteroidBottom = (asteroids[counter].getPos()).y +  asteroids[counter].getRadius();
-				if (asteroidBottom > alienTop && asteroidTop < alienBottom)
+				collisionAhead = true;
+				if ((A.getPos()).y <= alienPos.y)
 				{
-					collisionAhead = true;
-					if ((asteroids[counter].getPos()).y <= alienPos.y)
-					{
-						evadeDirection = { -0.5f, 1 };
-						break;
-					}
-					else
-					{
-						evadeDirection = { -0.5,-1 };
-						break;
-					}
+					evadeDirection = { -0.5f, 1 };
+					break;
+				}
+				else
+				{
+					evadeDirection = { -0.5,-1 };
+					break;
 				}
 			}
 		}
 	}
+
+	
 }
 
 bool Field::testAlienFieldCollision(const Vec2& alienPos)
 {
-	for (int counter = 0; counter < maxAsteroids; ++counter)
+	for (const Asteroid& A : asteroids)
 	{
-		if (!asteroids[counter].destroyed&&asteroids[counter].collideAlien(alienPos, Alien::halfWidth, Alien::halfHeight))
+		if (A.collideAlien(alienPos, Alien::halfWidth, Alien::halfHeight))
 		{
 			return true;
 		}
@@ -245,24 +226,14 @@ void Field::initLevel(std::mt19937 & rng, int level)
 					break;
 				}
 			}
-			
-		}
-		while (!noIssue);
+
+		} while (!noIssue);
 		Vec2 newDirection = Vec2(randomDirection(rng), randomDirection(rng));
-		asteroids[counter].init(newPos, newDirection, Asteroid::Size::large, counter, speedModifier);
+		generateNewAsteroid(newPos, newDirection, Asteroid::Size::large);
 	}
 }
 
 bool Field::levelComplete()
 {
-	bool complete = true;
-	for (int counter = 0; counter < maxAsteroids; ++counter)
-	{
-		if (!asteroids[counter].destroyed)
-		{
-			complete = false;
-			break;
-		}
-	}
-	return complete;
+	return (asteroids.size() == 0);
 }

@@ -11,11 +11,11 @@
 class Field
 {
 private:
-	static constexpr int maxAsteroids = 50;
-	Asteroid asteroids[maxAsteroids];
+	std::vector<Asteroid> asteroids;
 
 	void doAsteroidDestruction(Asteroid& asteroid);
-	void generateNewAsteroid(Vec2& pos, Vec2& direction, Asteroid::Size& size);
+	void deleteAsteroid(int index);
+	void generateNewAsteroid(Vec2& pos, Vec2& direction, Asteroid::Size size);
 	void checkAsteroidsHitpoints();
 	std::random_device rd;
 	std::mt19937 rng;
