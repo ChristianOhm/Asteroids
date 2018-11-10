@@ -25,6 +25,7 @@ void Bullets::updateBullets(float dt, Timer & timer, Field& field, Rocket& rocke
 		if (!stop && field.checkHit(currentBullet->getPos()))
 		{
 			stop = true;
+			startHitAnimation(currentBullet->getPos(), timer);
 			deleteBullet(currentBullet);
 		}
 		
@@ -36,15 +37,25 @@ void Bullets::updateBullets(float dt, Timer & timer, Field& field, Rocket& rocke
 		}
 
 		if (!stop && currentBullet->origin == Bullet::Origin::alien 
-			&& rocket.testSphereCollision(currentBullet->getPos(), currentBullet->radius))
+			&& rocket.testSphereCollision(currentBullet->getPos(), currentBullet->getRadius()))
 		{
 			stop = true;
 			deleteBullet(currentBullet);
 			rocket.takingDamage(Bullet::damageOnHit, timer);
-
 		}
 	} 
 
+	Bullet* nextHitAnimation = topHitAnimationPtr;
+
+	while (nextHitAnimation != nullptr)
+	{
+		Bullet* currentHitAnimation = nextHitAnimation;
+		nextHitAnimation = currentHitAnimation->getNext();
+		if (currentHitAnimation->deactivateHitAnimation)
+		{
+			deleteHitAnimation(currentHitAnimation);
+		}
+	}
 }
 
 void Bullets::draw(Graphics & gfx)
@@ -55,6 +66,10 @@ void Bullets::draw(Graphics & gfx)
 		currentBullet->draw(gfx);
 	}
 
+	for (Bullet* currentHitAnimation = topHitAnimationPtr; currentHitAnimation != 0; currentHitAnimation = currentHitAnimation->getNext())
+	{
+		currentHitAnimation->draw(gfx);
+	}
 
 }
 
@@ -74,8 +89,30 @@ void Bullets::deleteBullet(Bullet * toDelete)
 		delete toDelete;
 	}
 	
-	
-	
-	
+}
 
+void Bullets::deleteHitAnimation(Bullet * toDelete)
+{
+	assert(toDelete != 0);
+	Bullet* oldNext = toDelete->separate();
+	if (toDelete == topHitAnimationPtr)
+	{
+		topHitAnimationPtr = oldNext;
+		delete toDelete;
+	}
+	else
+	{
+		topHitAnimationPtr->reLink(toDelete, oldNext);
+		delete toDelete;
+	}
+}
+
+void Bullets::startHitAnimation(Vec2 pos_in, Timer& timer)
+{
+	if (!pos_in.outsideScreen(Bullet::radiusHitAnimation))
+	{
+		topHitAnimationPtr = new Bullet(pos_in, topHitAnimationPtr);
+		timer.init(&topHitAnimationPtr->deactivateHitAnimation, Bullet::durationHitAnimation);
+	}
+	
 }

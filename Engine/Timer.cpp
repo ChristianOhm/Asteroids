@@ -1,63 +1,125 @@
 #include "Timer.h"
+#include <assert.h>
+
+void Timer::deleteSingleTimer(SingleTimer * toDelete)
+{
+	assert(toDelete != 0);
+	SingleTimer* oldNext = toDelete->separate();
+	if (toDelete == topSingleTimerPtr)
+	{
+		topSingleTimerPtr = oldNext;
+		delete toDelete;
+	}
+	else
+	{
+		topSingleTimerPtr->reLink(toDelete, oldNext);
+		delete toDelete;
+	}
+}
 
 void Timer::init(bool * stateToChange_in, float timeMS)
 {
-	//1. Find free timer
-	int counter = 0;
-	for (; active[counter] && counter < nTimer - 1; ++counter);
-
-	//2. Initialize if last element is free
-	if (!active[counter])
-	{
-		active[counter] = true;
-		currentTime[counter] = 0.0f;
-		endTime[counter] = timeMS;
-		stateToChange[counter] = stateToChange_in;
-	}
-
-	
-	
+	topSingleTimerPtr = new SingleTimer(timeMS, stateToChange_in, topSingleTimerPtr);
 }
 
 void Timer::terminate(bool * stateToChange_in)
 {
-	for (int counter = 0; counter < nTimer; ++counter)
+	SingleTimer* nextSingleTimer = topSingleTimerPtr;
+
+	while (nextSingleTimer != nullptr)
 	{
-		if (stateToChange[counter] == stateToChange_in)
+		SingleTimer* currentSingleTimer = nextSingleTimer;
+		nextSingleTimer = currentSingleTimer->getNext();
+		if (currentSingleTimer->terminate(stateToChange_in))
 		{
-			*stateToChange[counter] = !*stateToChange[counter];
-			active[counter] = false;
-			stateToChange[counter] = 0;
+			deleteSingleTimer(currentSingleTimer);
 			break;
 		}
 	}
-
 }
 
 void Timer::addTime(float dt)
 {
-	for (int counter = 0; counter < nTimer; ++counter)
+	SingleTimer* nextSingleTimer = topSingleTimerPtr;
+
+	while (nextSingleTimer != nullptr)
 	{
-		if (active[counter])
+		SingleTimer* currentSingleTimer = nextSingleTimer;
+		nextSingleTimer = currentSingleTimer->getNext();
+		if (currentSingleTimer->timeOver(dt))
 		{
-			currentTime[counter] += dt;
-			if (currentTime[counter] >= endTime[counter])
-			{
-				*stateToChange[counter] = !*stateToChange[counter];
-				active[counter] = false;
-				stateToChange[counter] = 0;
-			}
+			deleteSingleTimer(currentSingleTimer);
 		}
 	}
 }
 
 Timer::Timer()
 {
-	for (int counter = 0; counter < nTimer; ++counter)
+	topSingleTimerPtr = nullptr;
+}
+
+Timer::SingleTimer * Timer::SingleTimer::separate()
+{
+	SingleTimer * temp = nextSingleTimerPtr;
+	nextSingleTimerPtr = nullptr;
+	return temp;;
+}
+
+void Timer::SingleTimer::reLink(SingleTimer * toReplace, SingleTimer * replaceWith)
+{
+	if (nextSingleTimerPtr == toReplace)
 	{
-		currentTime[counter] = 0.0f;
-		endTime[counter] = 0.0f;
-		stateToChange[counter] = 0;
-		active[counter] = false;
+		nextSingleTimerPtr = replaceWith;
+	}
+	else if (nextSingleTimerPtr != 0)
+	{
+		nextSingleTimerPtr->reLink(toReplace, replaceWith);
+	}
+}
+
+Timer::SingleTimer * Timer::SingleTimer::getNext()
+{
+	return nextSingleTimerPtr;
+}
+
+Timer::SingleTimer::SingleTimer(float duration_in, bool * stateToChanege_in, SingleTimer * nextSingleTimerPtr_in)
+	:
+	endTime (duration_in),
+	stateToChange(stateToChanege_in),
+	nextSingleTimerPtr (nextSingleTimerPtr_in)
+{
+	currentTime = 0.0f;
+}
+
+Timer::SingleTimer::SingleTimer()
+{
+	delete nextSingleTimerPtr;
+	nextSingleTimerPtr = nullptr;
+}
+
+bool Timer::SingleTimer::timeOver(float dt)
+{
+	currentTime += dt;
+	if (currentTime >= endTime)
+	{
+		*stateToChange = !*stateToChange;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Timer::SingleTimer::terminate(bool * stateToChangeSearch)
+{
+	if (stateToChange == stateToChangeSearch)
+	{
+		*stateToChange = !*stateToChange;
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }

@@ -19,6 +19,11 @@ Vec2 Bullet::getPos()
 	return pos;
 }
 
+float Bullet::getRadius()
+{
+	return radius;
+}
+
 Bullet::Bullet(PDVec pdVec_in, Origin origin_in, Bullet * nextBulletPtr_in)
 	:
 	nextBulletPtr(nextBulletPtr_in),
@@ -39,12 +44,29 @@ Bullet::Bullet(PDVec pdVec_in, Origin origin_in, Bullet * nextBulletPtr_in)
 		radius = 2.0f;
 		c = Colors::Green;
 		break;
+
 	}
 }
+
+Bullet::Bullet(Vec2 pos_in, Bullet * nextHitAnimationPtr_in)
+	:
+	nextBulletPtr(nextHitAnimationPtr_in),
+	pos (pos_in)
+{
+	origin = Origin::hitAnimation;
+	speed = 0;
+	radius = radiusHitAnimation;
+	c = Colors::Red;
+	deactivateHitAnimation = false;
+
+}
+
+
 
 Bullet::~Bullet()
 {
 	delete nextBulletPtr;
+	nextBulletPtr = nullptr;
 }
 
 Bullet * Bullet::separate()

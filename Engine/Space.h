@@ -16,6 +16,7 @@
 #include "Bullets.h"
 #include "PowerUp.h"
 
+
 class Space
 {
 private:
