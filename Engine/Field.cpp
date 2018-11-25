@@ -52,7 +52,8 @@ void Field::deleteAsteroid(int index)
 
 void Field::generateNewAsteroid(Vec2 & pos, Vec2 & direction, Asteroid::Size size)
 {
-	asteroids.push_back(Asteroid(pos, direction, size, asteroids.size(), speedModifier));
+	asteroids.emplace_back(Asteroid(pos, direction, size, asteroids.size(), speedModifier, 
+		sprites2, rng));
 }
 
 void Field::checkAsteroidsHitpoints()
@@ -68,11 +69,12 @@ void Field::checkAsteroidsHitpoints()
 	}	
 }
 
-Field::Field()
+Field::Field(const Sprites2& sprites2)
 	:
 	rng((rd())),
 	collisionSound({ L"sound\\Collision_0.wav", L"sound\\Collision_1.wav" }),//, L"sound\\Collision_2.wav", L"sound\\Collision_3.wav" }),
-	wallCollideSound({ L"sound\\Wall_0.wav", L"sound\\Wall_1.wav" , L"sound\\Wall_2.wav",L"sound\\Wall_3.wav" })
+	wallCollideSound({ L"sound\\Wall_0.wav", L"sound\\Wall_1.wav" , L"sound\\Wall_2.wav",L"sound\\Wall_3.wav" }),
+	sprites2(sprites2)
 {
 
 }

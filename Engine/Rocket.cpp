@@ -20,7 +20,7 @@ void Rocket::draw(Graphics & gfx)
 	//gfx.PutPixel(pos.x, pos.y, Colors::Red);
 	if (shieldActive)
 	{
-		gfx.drawCircle(int(pos.x), int(pos.y), halfLength, halfLength-2, Colors::Green);
+		gfx.drawCircle(int(pos.x), int(pos.y), int(halfLength), int(halfLength)-2, Colors::Green);
 	}
 	shieldDisplay.draw(gfx, shieldEnergy);
 }

@@ -15,11 +15,13 @@
 #include "PDVec.h"
 #include "Bullets.h"
 #include "PowerUp.h"
+#include "Sprites2.h"
 
 
 class Space
 {
 private:
+	const Sprites2& sprites2;
 	Rocket rocket;
 	Field field;
 	Sound shoot;
@@ -39,13 +41,14 @@ private:
 	StageLevelEnd stageLevelEnd = StageLevelEnd::stop;
 	bool powerUpSwitches[PowerUp::nPowers];
 	void processPowerUpSwitches(Timer& timer);
+	
 
 public:
 	void update(Keyboard& kbd, float dt, Timer& timer);
 	bool levelComplete();
 	void initLevel(int level, Timer& timer);
 	void draw(Graphics& gfx);
-	Space();
+	Space(const Sprites2& sprites2_in);
 	bool endSequenceComplete(float dt, Timer& timer);
 	bool rocketDestroyed();
 

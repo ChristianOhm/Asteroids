@@ -89,11 +89,14 @@ void Space::draw(Graphics & gfx)
 
 }
 
-Space::Space()
+Space::Space(const Sprites2& sprites2_in)
 	:
 	rng(std::random_device()()),
-	shoot(L"Sound\\Shoot.wav")
+	shoot(L"Sound\\Shoot.wav"),
+	sprites2(sprites2_in),
+	field(sprites2)
 	
+
 
 {
 	field.initLevel(rng, 1);

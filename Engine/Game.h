@@ -34,6 +34,8 @@
 #include <random>
 #include "Timer.h"
 #include "Space.h"
+#include"Sprites2.h"
+
 
 
 class Game
@@ -60,9 +62,11 @@ private:
 private:
 	MainWindow& wnd;
 	Graphics gfx;
+	Sprites2 sprites2;
 	FrameTimer ft;
 	Space space;
 	Timer timer;
+	
 	bool pauseMode = true;
 	Status gameStatus = Status::pause;
 	int currentLevel = 1;

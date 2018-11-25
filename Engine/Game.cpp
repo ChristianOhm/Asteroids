@@ -26,7 +26,8 @@
 Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
-	gfx(wnd)
+	gfx(wnd),
+	space(sprites2)
 {
 	timer.init(&pauseMode, 2);
 }
@@ -38,7 +39,7 @@ void Game::Go()
 	float elapsedTime = ft.Mark();
 	while (elapsedTime > 0.0f)
 	{
-		float dt = std::min(0.025f, elapsedTime);
+		float dt = std::min(0.15f, elapsedTime);
 		elapsedTime -= dt;
 		timer.addTime(dt);
 		UpdateModel(dt);

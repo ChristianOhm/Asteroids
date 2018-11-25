@@ -7,12 +7,13 @@
 #include "SoundEffect.h"
 #include "Rocket.h"
 #include <vector>
+#include "Sprites2.h"
 
 class Field
 {
 private:
+	const Sprites2& sprites2;
 	std::vector<Asteroid> asteroids;
-
 	void doAsteroidDestruction(Asteroid& asteroid);
 	void deleteAsteroid(int index);
 	void generateNewAsteroid(Vec2& pos, Vec2& direction, Asteroid::Size size);
@@ -26,11 +27,11 @@ private:
 	static constexpr float asteroidFreeZoneRadiusSq = 10000;
 	float speedModifier = 1;
 	float asteroidMinDistSq = 6724;
-
+	
 
 
 public:
-	Field();
+	Field(const Sprites2& sprites2);
 	void updateAsteroids(float dt);
 	void draw(Graphics& gfx);
 	bool checkHit(Vec2& posBullet);

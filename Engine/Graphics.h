@@ -25,6 +25,10 @@
 #include "ChiliException.h"
 #include "Colors.h"
 #include"Vec2.h"
+#include "RectI.h"
+#include "Surface.h"
+
+
 
 class Graphics
 {
@@ -64,7 +68,14 @@ public:
 	void DrawRect(Vec2& upperLeft, Vec2& lowerRight, Color c);
 	void DrawRect(Vec2& upperLeft, Vec2& lowerRight, float padding, Color c);
 	void DrawRect(Vec2& pos, float halfWidth, float halfHight, Color c);
+	void drawSpriteNonChroma(const Surface& surface, int x, int y);
+	void drawSpriteNonChroma(const Surface& surface, const RectI& sourceRect, int x, int y);
+	void drawSpriteNonChroma(const Surface& surface, RectI sourceRect, const RectI& clipRect, int x, int y);
+	void drawSprite(const Surface& surface, RectI sourceRect, const RectI& clipRect, int x, int y, Color chroma = Colors::Magenta);
+	void drawSprite(const Surface& surface, int x, int y, Color chroma = Colors::Magenta);
+	void drawSprite(const Surface& surface, RectI sourceRect, int x, int y, Color chroma = Colors::Magenta);
 
+	RectI getScreenRect() const;
 
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;

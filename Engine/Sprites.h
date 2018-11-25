@@ -6,9 +6,6 @@ class Sprites
 {
 public:
 	static void drawRocket(Graphics& gfx, const Vec2& pos, float angle);
-	static void drawLargeAsteroid(Graphics& gfx, const Vec2& pos);
-	static void drawMediumAsteroid(Graphics& gfx, const Vec2& pos);
-	static void drawTinyAsteroid(Graphics& gfx, const Vec2& pos);
 	static void drawAlienShip(Graphics& gfx, const Vec2& pos);
 	static void drawGetReady(Graphics& gfx, const Vec2& pos);
 	static void drawLeavingSector(Graphics& gfx, const Vec2 pos);

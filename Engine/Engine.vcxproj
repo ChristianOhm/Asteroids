@@ -137,6 +137,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Alien.h" />
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Bullets.h" />
     <ClInclude Include="ChiliException.h" />
@@ -152,6 +153,7 @@
     <ClInclude Include="Header.h" />
     <ClInclude Include="PDVec.h" />
     <ClInclude Include="PowerUp.h" />
+    <ClInclude Include="RectI.h" />
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="Space.h" />
     <ClInclude Include="Sprites.h" />
@@ -161,11 +163,15 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundEffect.h" />
+    <ClInclude Include="Sprites2.h" />
+    <ClInclude Include="Surface.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vec2.h" />
+    <ClInclude Include="Vei2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Alien.cpp" />
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Asteroid.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Bullets.cpp" />
@@ -181,12 +187,16 @@
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PDVec.cpp" />
     <ClCompile Include="PowerUp.cpp" />
+    <ClCompile Include="RectI.cpp" />
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Space.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="Sprites2.cpp" />
+    <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Vec2.cpp" />
+    <ClCompile Include="Vei2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="FramebufferPS.hlsl">
@@ -254,6 +264,7 @@
     <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Asteroids_huge.bmp" />
     <Image Include="Chili.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -312,6 +312,109 @@ void Graphics::DrawRect(Vec2 & pos, float halfWidth, float halfHight, Color c)
 
 
 }
+void Graphics::drawSpriteNonChroma(const Surface & surface, int x_off, int y_off)
+{
+	drawSpriteNonChroma(surface, surface.getRect(), getScreenRect(), x_off, y_off);
+
+}
+
+void Graphics::drawSpriteNonChroma(const Surface & surface, const RectI & sourceRect, int x_off, int y_off)
+{
+
+	drawSpriteNonChroma(surface, sourceRect, getScreenRect(), x_off, y_off);
+}
+
+void Graphics::drawSpriteNonChroma(const Surface & surface, RectI sourceRect, const RectI & clipRect, int x_off, int y_off)
+{
+	assert(sourceRect.left >= 0);
+	assert(sourceRect.top >= 0);
+	assert(sourceRect.right <= surface.getWidth());
+	assert(sourceRect.bottom <= surface.getHeight());
+
+	if (x_off < clipRect.left)
+	{
+		sourceRect.left += (clipRect.left - x_off);
+		x_off = clipRect.left;
+	}
+	if (y_off < clipRect.top)
+	{
+		sourceRect.top += (clipRect.top - y_off);
+		y_off = clipRect.top;
+	}
+	if ((x_off + sourceRect.getWidth() > clipRect.right))
+	{
+		sourceRect.right -= (sourceRect.getWidth() - clipRect.right + x_off);
+	}
+	if ((y_off + sourceRect.getHeight() > clipRect.bottom))
+	{
+		sourceRect.bottom -= (sourceRect.getHeight() - clipRect.bottom + y_off);
+	}
+
+	for (int x = sourceRect.left; x < sourceRect.right; ++x)
+	{
+		for (int y = sourceRect.top; y < sourceRect.bottom; ++y)
+		{
+			PutPixel(x + x_off - sourceRect.left, y + y_off - sourceRect.top, surface.getPixel(x, y));
+		}
+	}
+
+}
+
+void Graphics::drawSprite(const Surface & surface, RectI sourceRect, const RectI & clipRect, int x_off, int y_off, Color chroma)
+{
+	assert(sourceRect.left >= 0);
+	assert(sourceRect.top >= 0);
+	assert(sourceRect.right <= surface.getWidth());
+	assert(sourceRect.bottom <= surface.getHeight());
+
+	if (x_off < clipRect.left)
+	{
+		sourceRect.left += (clipRect.left - x_off);
+		x_off = clipRect.left;
+	}
+	if (y_off < clipRect.top)
+	{
+		sourceRect.top += (clipRect.top - y_off);
+		y_off = clipRect.top;
+	}
+	if ((x_off + sourceRect.getWidth() > clipRect.right))
+	{
+		sourceRect.right -= (sourceRect.getWidth() - clipRect.right + x_off);
+	}
+	if ((y_off + sourceRect.getHeight() > clipRect.bottom))
+	{
+		sourceRect.bottom -= (sourceRect.getHeight() - clipRect.bottom + y_off);
+	}
+
+	for (int x = sourceRect.left; x < sourceRect.right; ++x)
+	{
+		for (int y = sourceRect.top; y < sourceRect.bottom; ++y)
+		{
+			Color pixel = surface.getPixel(x, y);
+			if (pixel != chroma)
+			{
+				PutPixel(x + x_off - sourceRect.left, y + y_off - sourceRect.top, pixel);
+			}
+
+		}
+	}
+
+}
+
+void Graphics::drawSprite(const Surface & surface, int x, int y, Color chroma)
+{
+	drawSprite(surface, surface.getRect(), getScreenRect(), x, y, chroma);
+}
+
+void Graphics::drawSprite(const Surface & surface, RectI sourceRect, int x, int y, Color chroma)
+{
+	drawSprite(surface, sourceRect, getScreenRect(), x, y, chroma);
+}
+
+RectI Graphics::getScreenRect() const
+{
+	return RectI(Vei2(0, 0), ScreenWidth, ScreenHeight);
+}
 
 
 void Graphics::EndFrame()

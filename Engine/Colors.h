@@ -34,6 +34,14 @@ public:
 		:
 		dword( dw )
 	{}
+	bool operator == (const Color rhs) const
+	{
+		return (dword == rhs.dword);
+	}
+	bool operator != (const Color rhs) const
+	{
+		return !(*this == rhs);
+	}
 	constexpr Color( unsigned char x,unsigned char r,unsigned char g,unsigned char b )
 		:
 		dword( (x << 24u) | (r << 16u) | (g << 8u) | b )

@@ -1,15 +1,16 @@
 #include "Asteroid.h"
 #include <random>
 
+Asteroid::Asteroid(const Vec2 pos_in, const Vec2 direction_in, const Size size_in, 
+	const int identifier_in, const float speedModifier, const Sprites2& sprites2, std::mt19937& rng)
 
-
-Asteroid::Asteroid(Vec2 pos_in, Vec2 direction_in, Size size_in, int identifier_in, float speedModifier)
 {
-	pos = pos_in;
-	identifier = identifier_in;
-	lastCollision = 999; //initialize to collision with wall
-	direction = direction_in;
-	size = size_in;
+	const Surface* tempSpritePtr = nullptr;
+	int tempAnimationSize;
+	std::uniform_int_distribution<int> randomFrame(0, 7);
+	int tempStartingFrame = randomFrame(rng);
+	std::uniform_int_distribution<int> randomSkin(0, 1);
+	
 	switch (size_in)
 	{
 	case Size::tiny:
@@ -18,6 +19,8 @@ Asteroid::Asteroid(Vec2 pos_in, Vec2 direction_in, Size size_in, int identifier_
 		speed = 100.0f * speedModifier;
 		mass = 50.0f;
 		damageOnHit = 2;
+		tempSpritePtr = &sprites2.asteroid_small;
+		tempAnimationSize = 32;
 		break;
 	case Size::medium:
 		radius = radius_medium;
@@ -25,6 +28,8 @@ Asteroid::Asteroid(Vec2 pos_in, Vec2 direction_in, Size size_in, int identifier_
 		speed = 50.0f * speedModifier;
 		mass = 100.0f;
 		damageOnHit = 5;
+		tempSpritePtr = &sprites2.asteroid_medium;
+		tempAnimationSize = 64;
 		break;
 	case Size::large:
 		radius = radius_large;
@@ -32,30 +37,31 @@ Asteroid::Asteroid(Vec2 pos_in, Vec2 direction_in, Size size_in, int identifier_
 		speed = 20.0f * speedModifier;
 		mass = 500.0f;
 		damageOnHit = 10;
+		tempSpritePtr = &sprites2.asteroid_huge;
+		tempAnimationSize = 128;
 		break;
 	}
-	direction = direction * speed;
+	int tempYpos = randomSkin(rng) * tempAnimationSize * 4;
+	size = size_in;
+	direction = direction_in * speed;
+	pos = pos_in;
+	identifier = identifier_in;
+	lastCollision = 999; //initialize to collision with wall
+	drawOffset = Vec2(tempAnimationSize/2, tempAnimationSize / 2);
+	animation.customInit(0, tempYpos, tempAnimationSize, tempAnimationSize, 8, 4, 0.15f, tempSpritePtr,
+		Colors::Magenta, tempStartingFrame);
 }
+
+
 
 void Asteroid::draw(Graphics & gfx) const
 {
-	switch (size)
-	{
-	case Size::tiny:
-		Sprites::drawTinyAsteroid(gfx, pos);
-		break;
-	case Size::medium:
-		Sprites::drawMediumAsteroid(gfx, pos);
-		break;
-	case Size::large:
-		Sprites::drawLargeAsteroid(gfx, pos);
-		break;
-	}
-	//gfx.drawCircle(pos.x, pos.y, radius, 0, Colors::Gray);
+	animation.draw(pos-drawOffset, gfx);
 }
 
 bool Asteroid::updatePos(float dt)
 {
+	animation.update(dt);
 	pos = pos + direction * dt;
 	bool reflect = false;
 
