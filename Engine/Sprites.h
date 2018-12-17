@@ -6,10 +6,6 @@ class Sprites
 {
 public:
 	static void drawRocket(Graphics& gfx, const Vec2& pos, float angle);
-	static void drawAlienShip(Graphics& gfx, const Vec2& pos);
-	static void drawGetReady(Graphics& gfx, const Vec2& pos);
-	static void drawLeavingSector(Graphics& gfx, const Vec2 pos);
-	static void drawGameOver(Graphics& gfx, const Vec2 pos);
 	static void drawBluePowerUp(Graphics& gfx, const Vec2 pos);
 	static void drawGreenPowerUp(Graphics& gfx, const Vec2 pos);
 	static void drawRedPowerUp(Graphics& gfx, const Vec2 pos);

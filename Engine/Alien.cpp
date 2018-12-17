@@ -13,13 +13,12 @@ void Alien::spawn(std::mt19937 & rng)
 
 void Alien::draw(Graphics & gfx)
 {
-	Sprites::drawAlienShip(gfx, pos);
-
-	//gfx.DrawRect(pos, halfWidth, halfHeight, Colors::Red);
+	animation.draw(pos - Vec2(halfWidth, halfHeight), gfx);
 }
 
 void Alien::updatePos(bool collisionAhead, Vec2& evadeDirection, float dt)
 {
+	animation.update(dt);
 	if (!collisionAhead)
 	{
 		pos.x = pos.x - dt * speed;
@@ -83,6 +82,13 @@ bool Alien::testShoot(float dt)
 			return false;
 		}
 	}
+}
+
+Alien::Alien(const Surface* alien)
+	:
+	alien(alien),
+	animation(0,0,52,24,2,1,0.5f,alien, Colors::Magenta)
+{
 }
 
 bool Alien::checkBulletHit(Vec2 & posBullet)

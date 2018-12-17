@@ -74,6 +74,9 @@ public:
 	void drawSprite(const Surface& surface, RectI sourceRect, const RectI& clipRect, int x, int y, Color chroma = Colors::Magenta);
 	void drawSprite(const Surface& surface, int x, int y, Color chroma = Colors::Magenta);
 	void drawSprite(const Surface& surface, RectI sourceRect, int x, int y, Color chroma = Colors::Magenta);
+	void drawSprite(const Surface& surface, const Color& substitute, RectI sourceRect, const RectI& clipRect, int x, int y, Color chroma = Colors::Magenta);
+	void drawSprite(const Surface& surface, const Color& substitute, int x, int y, Color chroma = Colors::Magenta);
+	void drawSprite(const Surface& surface, const Color& substitute, RectI sourceRect, int x, int y, Color chroma = Colors::Magenta);
 
 	RectI getScreenRect() const;
 

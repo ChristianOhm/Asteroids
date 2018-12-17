@@ -27,9 +27,10 @@ Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
 	gfx(wnd),
-	space(sprites2)
+	space(sprites2),
+	storyline("Story.txt", sprites2.smallChars, Colors::Green, RectI(20, 780, 20, 580))
 {
-	timer.init(&pauseMode, 2);
+	
 }
 	
 
@@ -52,26 +53,42 @@ void Game::Go()
 
 void Game::ComposeFrame()
 {
-
+	
 	switch (gameStatus)
 	{
-	case Status::pause:
-		space.draw(gfx);
-		Sprites::drawGetReady(gfx, { 275.0f, 200.0f });
+	case Status::introShowing:
+		storyline.draw(gfx);
 		break;
+	
+	case Status::pause:
+		{
+		space.draw(gfx);
+		std::string pauseText = " Stage " + std::to_string(currentLevel) + "\n\nGet Ready!";
+		sprites2.largeChars.printText(pauseText, Vei2(320.0f, 286.0f), gfx, Colors::Green);
+		break;
+		}
+		
 
 	case Status::levelRunning:
 		space.draw(gfx);
 		break;
 
 	case Status::levelEnding:
+		{
+		std::string endingText = "Leaving Sector...";
 		space.draw(gfx);
-		Sprites::drawLeavingSector(gfx, { 210.0f, 200.0f });
+		sprites2.largeChars.printText(endingText, Vei2(264.0f, 286.0f), gfx, Colors::Green);
 		break;
+		}
+		
 
 	case Status::lost:
+		{
+		std::string lostText = "Game Over!";
 		space.draw(gfx);
-		Sprites::drawGameOver(gfx, { 275.0f, 200.0f });
+		sprites2.largeChars.printText(lostText, Vei2(320.0f, 286.0f), gfx, Colors::Green);
+		}
+		
 	}
 }
 
@@ -81,6 +98,15 @@ void Game::UpdateModel(float dt)
 {
 	switch (gameStatus)
 	{
+	case Status::introShowing:
+		storyline.update(dt);
+		if (wnd.kbd.KeyIsPressed(VK_SPACE))
+		{
+			gameStatus = Status::pause;
+			timer.init(&pauseMode, 2);
+		}
+		break;
+	
 	case Status::pause:
 		if (!pauseMode)
 		{

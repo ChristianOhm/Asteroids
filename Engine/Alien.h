@@ -8,6 +8,8 @@
 #include"PDVec.h"
 #include"Rocket.h"
 #include "PowerUp.h"
+#include "Surface.h"
+#include"Animation.h"
 
 
 class Alien
@@ -15,7 +17,9 @@ class Alien
 private:
 	Vec2 pos;
 	float timeSinceSpawn = 0.0f;
-	
+	const Surface* alien;
+	Animation animation;
+
 	static constexpr int maxHitpoints = 3;
 	static constexpr int bulletsPerSalve = 5;
 	static constexpr float fireDelay = 0.1f;
@@ -29,7 +33,7 @@ private:
 	bool testShoot(float dt);
 
 public:
-
+	Alien(const Surface* alien);
 	static constexpr float halfWidth = 26;
 	static constexpr float halfHeight = 12;
 	static constexpr float speed = 80;

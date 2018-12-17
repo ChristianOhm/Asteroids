@@ -49,7 +49,7 @@ Surface::Surface(std::string filename)
 	{
 		height = bmInfoHeader.biHeight;
 		startCount = height - 1;
-		endCount = 0;
+		endCount = -1;
 		increment = -1;
 	}
 

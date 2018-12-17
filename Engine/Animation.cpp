@@ -5,7 +5,7 @@ void Animation::advance()
 {
 	assert(spritePtr != nullptr);
 	++currentFrame;
-	if (currentFrame >= (frames.size()-1))
+	if (currentFrame > (frames.size()-1))
 	{
 		currentFrame = 0;
 	}

@@ -94,7 +94,8 @@ Space::Space(const Sprites2& sprites2_in)
 	rng(std::random_device()()),
 	shoot(L"Sound\\Shoot.wav"),
 	sprites2(sprites2_in),
-	field(sprites2)
+	field(sprites2),
+	alien(&sprites2.alien)
 	
 
 

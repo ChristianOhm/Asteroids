@@ -175,7 +175,7 @@ void Rocket::gainingShield(int shieldGained)
 void Rocket::init()
 {
 	angle = 3.0f * 3.14159265f / 2.0f;
-	pos = Vec2(400, 353.5f);
+	pos = Vec2(400, 325.0f);
 	rotDirection = Vec2(0, 0);
 	moveVector = Vec2(0, 0);
 }

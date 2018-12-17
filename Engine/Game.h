@@ -35,7 +35,8 @@
 #include "Timer.h"
 #include "Space.h"
 #include"Sprites2.h"
-
+#include "Scrolltext.h"
+#include <string>
 
 
 class Game
@@ -50,6 +51,7 @@ private:
 	void UpdateModel(float dt);
 	enum class Status
 	{
+		introShowing,
 		levelRunning,
 		pause,
 		levelEnding,
@@ -66,11 +68,12 @@ private:
 	FrameTimer ft;
 	Space space;
 	Timer timer;
-	
+	Scrolltext storyline;
 	bool pauseMode = true;
-	Status gameStatus = Status::pause;
+	Status gameStatus = Status::introShowing;
 	int currentLevel = 1;
 	
+
 	/********************************/
 	/*  User Variables              */
 	/********************************/

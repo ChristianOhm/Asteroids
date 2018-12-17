@@ -415,6 +415,57 @@ RectI Graphics::getScreenRect() const
 {
 	return RectI(Vei2(0, 0), ScreenWidth, ScreenHeight);
 }
+void Graphics::drawSprite(const Surface & surface, const Color & substitute, RectI sourceRect, const RectI & clipRect, int x_off, int y_off, Color chroma)
+{
+	assert(sourceRect.left >= 0);
+	assert(sourceRect.top >= 0);
+	assert(sourceRect.right <= surface.getWidth());
+	assert(sourceRect.bottom <= surface.getHeight());
+
+	if (x_off < clipRect.left)
+	{
+		sourceRect.left += (clipRect.left - x_off);
+		x_off = clipRect.left;
+	}
+	if (y_off < clipRect.top)
+	{
+		sourceRect.top += (clipRect.top - y_off);
+		y_off = clipRect.top;
+	}
+	if ((x_off + sourceRect.getWidth() > clipRect.right))
+	{
+		sourceRect.right -= (sourceRect.getWidth() - clipRect.right + x_off);
+	}
+	if ((y_off + sourceRect.getHeight() > clipRect.bottom))
+	{
+		sourceRect.bottom -= (sourceRect.getHeight() - clipRect.bottom + y_off);
+	}
+
+	for (int x = sourceRect.left; x < sourceRect.right; ++x)
+	{
+		for (int y = sourceRect.top; y < sourceRect.bottom; ++y)
+		{
+			Color pixel = surface.getPixel(x, y);
+			if (pixel != chroma)
+			{
+				PutPixel(x + x_off - sourceRect.left, y + y_off - sourceRect.top, substitute);
+			}
+
+		}
+	}
+
+}
+
+void Graphics::drawSprite(const Surface & surface, const Color & substitute, int x, int y, Color chroma)
+{
+	drawSprite(surface, substitute, surface.getRect(), getScreenRect(), x, y, chroma);
+}
+
+void Graphics::drawSprite(const Surface & surface, const Color & substitute, RectI sourceRect, int x, int y, Color chroma)
+{
+	drawSprite(surface, substitute, sourceRect, getScreenRect(), x, y, chroma);
+}
+
 
 
 void Graphics::EndFrame()

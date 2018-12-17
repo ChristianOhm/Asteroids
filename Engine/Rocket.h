@@ -14,7 +14,7 @@ private:
 
 	float angle = 3.0f * 3.14159265f / 2.0f;
 	bool angleChanged = false;
-	Vec2 pos = Vec2(400,353.5f);
+	Vec2 pos = Vec2(400,325.0f);
 	Vec2 rotDirection = Vec2(0,0);
 	Vec2 moveVector = Vec2(0, 0);
 	float maxSpeedSq = 200.0f * 200.0f;
