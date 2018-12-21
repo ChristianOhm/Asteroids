@@ -95,7 +95,8 @@ Space::Space(const Sprites2& sprites2_in)
 	shoot(L"Sound\\Shoot.wav"),
 	sprites2(sprites2_in),
 	field(sprites2),
-	alien(&sprites2.alien)
+	alien(&sprites2.alien),
+	powerUp(sprites2.powerUps)
 	
 
 

@@ -239,5 +239,8 @@
     <Image Include="Aliens52x24.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="powerUp.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

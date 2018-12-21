@@ -48,22 +48,7 @@ void PowerUp::draw(Graphics & gfx)
 {
 	if (visible)
 	{
-		switch (type)
-		{
-		case Type::blue:
-			Sprites::drawBluePowerUp(gfx, pos);
-			break;
-		case Type::green:
-			Sprites::drawGreenPowerUp(gfx, pos);
-			break;
-		case Type::red:
-			Sprites::drawRedPowerUp(gfx, pos);
-			break;
-		case Type::yellow:
-			Sprites::drawYellowPowerUp(gfx, pos);
-			break;
-
-		}
+		gfx.drawSprite(surface, colors[(int)type], (int)pos.x, (int)pos.y, Colors::Magenta);
 	}
 	
 
@@ -76,4 +61,14 @@ void PowerUp::reset(Timer & timer)
 	timer.terminate(&visible);
 
 
+}
+
+PowerUp::PowerUp(const Surface& surface)
+	:
+	surface(surface)
+{
+	for (int counter = 0; counter <= 3; ++counter)
+	{
+		colors.emplace_back(RectI(counter * 25, (counter + 1) * 25, 0, 25));
+	}
 }

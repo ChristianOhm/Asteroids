@@ -11,6 +11,7 @@ public:
 	Surface asteroid_medium;
 	Surface asteroid_small;
 	Surface alien;
+	Surface powerUps;
 	Font smallChars;
 	Font largeChars;
 };

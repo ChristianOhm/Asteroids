@@ -4,6 +4,9 @@
 #include <random>
 #include "Sprites.h"
 #include "Rocket.h"
+#include "Surface.h"
+#include "RectI.h"
+#include <vector>
 
 class PowerUp
 {
@@ -19,8 +22,11 @@ public:
 	static constexpr float radius = 13;
 	static constexpr float angleForPower0 = 0.2f;
 	static constexpr int energyIncreaseForPower2 = 30;
+	PowerUp(const Surface& surface);
 
 private:
+	const Surface& surface;
+	std::vector<RectI> colors;
 	Vec2 pos;
 	bool visible = false;
 	static constexpr float halfHeight = 13;
