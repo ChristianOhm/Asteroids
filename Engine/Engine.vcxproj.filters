@@ -63,9 +63,6 @@
     <ClInclude Include="Vec2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sprites.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Rocket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -155,9 +152,6 @@
     <ClCompile Include="Vec2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sprites.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Rocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -240,6 +234,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="powerUp.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Spaceship_29x40.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

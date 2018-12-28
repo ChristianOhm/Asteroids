@@ -20,7 +20,6 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
-#include "Sprites.h"
 #include "Vec2.h"
 
 Game::Game(MainWindow& wnd)

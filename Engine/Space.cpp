@@ -96,10 +96,9 @@ Space::Space(const Sprites2& sprites2_in)
 	sprites2(sprites2_in),
 	field(sprites2),
 	alien(&sprites2.alien),
-	powerUp(sprites2.powerUps)
+	powerUp(sprites2.powerUps),
+	rocket(sprites2.rocket)
 	
-
-
 {
 	field.initLevel(rng, 1);
 	for (int counter = 0; counter < PowerUp::nPowers; ++counter)

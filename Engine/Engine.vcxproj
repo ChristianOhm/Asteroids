@@ -158,7 +158,6 @@
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="Scrolltext.h" />
     <ClInclude Include="Space.h" />
-    <ClInclude Include="Sprites.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="Mouse.h" />
@@ -195,7 +194,6 @@
     <ClCompile Include="Scrolltext.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Space.cpp" />
-    <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Sprites2.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -274,6 +272,7 @@
     <Image Include="Consolas13x24.bmp" />
     <Image Include="Fixedsys16x28.bmp" />
     <Image Include="powerUp.bmp" />
+    <Image Include="Spaceship_29x40.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

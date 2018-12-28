@@ -467,6 +467,62 @@ void Graphics::drawSprite(const Surface & surface, const Color & substitute, Rec
 }
 
 
+void Graphics::drawSpriteRotate(const Surface & surface, RectI sourceRect, const RectI & clipRect, int x_off, int y_off, float angle, Color chroma)
+{
+
+	int diagonalHalf = (int)(std::sqrt(sourceRect.getHeight()*sourceRect.getHeight() + sourceRect.getWidth() * sourceRect.getWidth())) / 2;
+	Vei2 centerOfRotation = sourceRect.GetCenter();
+	x_off -= centerOfRotation.x;
+	y_off -= centerOfRotation.y;
+	RectI targetRect = RectI::FromCenter(centerOfRotation, diagonalHalf, diagonalHalf);
+
+	if (targetRect.left + x_off < clipRect.left)
+	{
+		targetRect.left = clipRect.left - x_off;
+	}
+
+	if (targetRect.right + x_off > clipRect.right)
+	{
+		targetRect.right = clipRect.right - x_off;
+	}
+
+	if (targetRect.top + y_off < clipRect.top)
+	{
+		targetRect.top = clipRect.top - y_off;
+	}
+
+	if (targetRect.bottom + y_off > clipRect.bottom)
+	{
+		targetRect.bottom = clipRect.bottom - y_off;
+	}
+
+	float cosAngle = cos(angle);
+	float sinAngle = sin(angle);
+	int halfHeight = (int)sourceRect.getHeight() / 2;
+	int halfWidth = (int)sourceRect.getWidth() / 2;
+	for (int x = targetRect.left; x < targetRect.right; ++x)
+	{
+		for (int y = targetRect.top; y < targetRect.bottom; ++y)
+		{
+			int xTrans = (int)((x - centerOfRotation.x) * cosAngle + (y - centerOfRotation.y) * sinAngle) + halfWidth;
+			int yTrans = (int)((y - centerOfRotation.y) * cosAngle - (x - centerOfRotation.x) * sinAngle) + halfHeight;
+
+			if (sourceRect.Contains(Vei2(xTrans, yTrans)))
+			{
+				Color pixel = surface.getPixel(xTrans, yTrans);
+				if (pixel != chroma)
+				{
+					PutPixel(x + x_off, y + y_off, pixel);
+				}
+
+			}
+
+		}
+
+	}
+
+
+}
 
 void Graphics::EndFrame()
 {

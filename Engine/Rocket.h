@@ -2,17 +2,16 @@
 #include "Vec2.h"
 #include "Graphics.h"
 #include"Keyboard.h"
-#include "Sprites.h"
 #include "PDVec.h"
 #include "Timer.h"
-
+#include "Surface.h"
 
 
 class Rocket
 {
 private:
 
-	float angle = 3.0f * 3.14159265f / 2.0f;
+	float angle = 0;
 	bool angleChanged = false;
 	Vec2 pos = Vec2(400,325.0f);
 	Vec2 rotDirection = Vec2(0,0);
@@ -32,7 +31,7 @@ private:
 	void updateControls(Keyboard& kbd);
 	void updatePhysics(float dt);
 	void updatePos(float dt);
-
+	const Surface& surface;
 	class ShieldDisplay
 	{
 	public:
@@ -47,6 +46,7 @@ private:
 	};
 	ShieldDisplay shieldDisplay;
 public:
+	Rocket(const Surface& surface);
 	void draw(Graphics& gfx);
 	void update(Keyboard& kbd, float dt);
 	static constexpr int halfSize = 18;

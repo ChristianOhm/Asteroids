@@ -3,7 +3,6 @@
 #include "Vec2.h"
 #include <random>
 #include "Graphics.h"
-#include "Sprites.h"
 #include "SoundEffect.h"
 #include "Rocket.h"
 #include <vector>

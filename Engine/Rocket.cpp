@@ -2,7 +2,7 @@
 
 void Rocket::updateDirection()
 {
-	rotDirection = Vec2(-cos(angle), sin(angle));
+	rotDirection = Vec2(sin(angle), -cos(angle) );
 }
 
 void Rocket::updateSpeed(float dt)
@@ -14,10 +14,16 @@ void Rocket::updateSpeed(float dt)
 	}
 }
 
+Rocket::Rocket(const Surface & surface)
+	:
+	surface (surface)
+{
+}
+
 void Rocket::draw(Graphics & gfx)
 {
-	Sprites::drawRocket(gfx, pos, angle);
-	//gfx.PutPixel(pos.x, pos.y, Colors::Red);
+	
+	gfx.drawSpriteRotate(surface, surface.getRect(), gfx.getScreenRect(), pos.x, pos.y, angle, Colors::Magenta);
 	if (shieldActive)
 	{
 		gfx.drawCircle(int(pos.x), int(pos.y), int(halfLength), int(halfLength)-2, Colors::Green);
@@ -36,13 +42,13 @@ void Rocket::updateControls(Keyboard & kbd)
 {
 	if (kbd.KeyIsPressed(VK_RIGHT))
 	{
-		angle -= 0.04;
+		angle += 0.04;
 		angleChanged = true;
 	}
 
 	if (kbd.KeyIsPressed(VK_LEFT))
 	{
-		angle += 0.04;
+		angle -= 0.04;
 		angleChanged = true;
 	}
 
@@ -174,7 +180,7 @@ void Rocket::gainingShield(int shieldGained)
 
 void Rocket::init()
 {
-	angle = 3.0f * 3.14159265f / 2.0f;
+	angle = 0.0f;
 	pos = Vec2(400, 325.0f);
 	rotDirection = Vec2(0, 0);
 	moveVector = Vec2(0, 0);
@@ -207,12 +213,12 @@ bool Rocket::rotateLeft()
 	}
 	if (rotDirection.y > 0)
 	{
-		angle -= 0.04;
+		angle += 0.04;
 		angleChanged = true;
 	}
 	else
 	{
-		angle += 0.04;
+		angle -= 0.04;
 		angleChanged = true;
 	}
 	return false;

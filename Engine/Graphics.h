@@ -77,7 +77,7 @@ public:
 	void drawSprite(const Surface& surface, const Color& substitute, RectI sourceRect, const RectI& clipRect, int x, int y, Color chroma = Colors::Magenta);
 	void drawSprite(const Surface& surface, const Color& substitute, int x, int y, Color chroma = Colors::Magenta);
 	void drawSprite(const Surface& surface, const Color& substitute, RectI sourceRect, int x, int y, Color chroma = Colors::Magenta);
-
+	void drawSpriteRotate(const Surface& surface, RectI sourceRect, const RectI & clipRect, int x, int y, float angle, Color chroma);
 	RectI getScreenRect() const;
 
 private:

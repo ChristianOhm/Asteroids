@@ -14,5 +14,7 @@ public:
 	Surface powerUps;
 	Font smallChars;
 	Font largeChars;
+	Surface rocket;
+
 };
 
