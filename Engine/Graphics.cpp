@@ -296,6 +296,15 @@ void Graphics::DrawRect(int x0, int y0, int x1, int y1, Color c)
 	}
 }
 
+Color Graphics::GetPixel(int x, int y) const
+{
+	assert(x >= 0);
+	assert(x < int(Graphics::ScreenWidth));
+	assert(y >= 0);
+	assert(y < int(Graphics::ScreenHeight));
+	return pSysBuffer[Graphics::ScreenWidth * y + x];
+}
+
 void Graphics::DrawRect(Vec2 & upperLeft, Vec2 & lowerRight, Color c)
 {
 	DrawRect(int(upperLeft.x), int(upperLeft.y), int(lowerRight.x), int(lowerRight.y), c);
@@ -523,6 +532,57 @@ void Graphics::drawSpriteRotate(const Surface & surface, RectI sourceRect, const
 
 
 }
+
+void Graphics::drawSpriteGhost(const Surface & surface, RectI sourceRect, const RectI & clipRect, int x_off, int y_off, Color chroma)
+{
+	assert(sourceRect.left >= 0);
+	assert(sourceRect.top >= 0);
+	assert(sourceRect.right <= surface.getWidth());
+	assert(sourceRect.bottom <= surface.getHeight());
+
+	if (x_off < clipRect.left)
+	{
+		sourceRect.left += (clipRect.left - x_off);
+		x_off = clipRect.left;
+	}
+	if (y_off < clipRect.top)
+	{
+		sourceRect.top += (clipRect.top - y_off);
+		y_off = clipRect.top;
+	}
+	if ((x_off + sourceRect.getWidth() > clipRect.right))
+	{
+		sourceRect.right -= (sourceRect.getWidth() - clipRect.right + x_off);
+	}
+	if ((y_off + sourceRect.getHeight() > clipRect.bottom))
+	{
+		sourceRect.bottom -= (sourceRect.getHeight() - clipRect.bottom + y_off);
+	}
+
+	for (int x = sourceRect.left; x < sourceRect.right; ++x)
+	{
+		for (int y = sourceRect.top; y < sourceRect.bottom; ++y)
+		{
+			Color pixel = surface.getPixel(x, y);
+			if (pixel != chroma)
+			{
+				Color dst = GetPixel(x + x_off - sourceRect.left, y + y_off - sourceRect.top);
+				Color blend = Color
+					(
+						(dst.GetR() + pixel.GetR()) / 2,
+						(dst.GetG() + pixel.GetG()) / 2,
+						(dst.GetB() + pixel.GetB()) / 2
+					);
+		
+
+				PutPixel(x + x_off - sourceRect.left, y + y_off - sourceRect.top, blend);
+			}
+
+		}
+	}
+
+}
+
 
 void Graphics::EndFrame()
 {

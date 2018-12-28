@@ -9,6 +9,8 @@ Sprites2::Sprites2()
 	largeChars("Fixedsys16x28.bmp", Colors::White),
 	alien("Aliens52x24.bmp"),
 	powerUps("powerUp.bmp"),
-	rocket("Spaceship_29x40.bmp")
+	rocket("Spaceship_29x40.bmp"),
+	engine("engine24x40.bmp"),
+	shield("shield50x50.bmp")
 {
 }

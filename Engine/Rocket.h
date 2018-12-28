@@ -31,7 +31,9 @@ private:
 	void updateControls(Keyboard& kbd);
 	void updatePhysics(float dt);
 	void updatePos(float dt);
-	const Surface& surface;
+	const Surface& surfaceR;
+	const Surface& surfaceE;
+	const Surface & surfaceS;
 	class ShieldDisplay
 	{
 	public:
@@ -46,7 +48,7 @@ private:
 	};
 	ShieldDisplay shieldDisplay;
 public:
-	Rocket(const Surface& surface);
+	Rocket(const Surface & surfaceR, const Surface& surfaceE, const Surface& surfaceS);
 	void draw(Graphics& gfx);
 	void update(Keyboard& kbd, float dt);
 	static constexpr int halfSize = 18;
@@ -56,8 +58,8 @@ public:
 	Vec2 getmoveVector();
 	bool testSphereCollision(Vec2 spherePos, float sphereRadius) const;
 	bool shieldActive = false;
-	static constexpr float halfLength = 27.0f / 2.0f;
-	static constexpr float halfWidth = 20.0f / 2.0f;
+	static constexpr float halfLength = 20.0f;
+	static constexpr float halfWidth = 12.0f;
 	static constexpr float mass = 500;
 	int lastCollision = 999;
 	void takingDamage(int damageReceived, Timer& timer);

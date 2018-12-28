@@ -15,6 +15,7 @@ public:
 	Font smallChars;
 	Font largeChars;
 	Surface rocket;
-
+	Surface engine;
+	Surface shield;
 };
 

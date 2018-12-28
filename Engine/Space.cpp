@@ -97,7 +97,7 @@ Space::Space(const Sprites2& sprites2_in)
 	field(sprites2),
 	alien(&sprites2.alien),
 	powerUp(sprites2.powerUps),
-	rocket(sprites2.rocket)
+	rocket(sprites2.rocket, sprites2.engine, sprites2.shield)
 	
 {
 	field.initLevel(rng, 1);

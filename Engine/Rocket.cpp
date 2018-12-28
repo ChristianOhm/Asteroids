@@ -14,20 +14,29 @@ void Rocket::updateSpeed(float dt)
 	}
 }
 
-Rocket::Rocket(const Surface & surface)
+Rocket::Rocket(const Surface & surfaceR, const Surface& surfaceE, const Surface& surfaceS)
 	:
-	surface (surface)
+	surfaceR (surfaceR),
+	surfaceE (surfaceE),
+	surfaceS (surfaceS)
 {
 }
 
 void Rocket::draw(Graphics & gfx)
 {
+	gfx.drawSpriteRotate(surfaceR, surfaceR.getRect(), gfx.getScreenRect(), pos.x, pos.y, angle, Colors::Magenta);
+
+	if (engineOn)
+	{
+		Vec2 posE = pos - rotDirection* 40;
+		gfx.drawSpriteRotate(surfaceE, surfaceE.getRect(), gfx.getScreenRect(), posE.x, posE.y, angle, Colors::Magenta);
+	}
 	
-	gfx.drawSpriteRotate(surface, surface.getRect(), gfx.getScreenRect(), pos.x, pos.y, angle, Colors::Magenta);
 	if (shieldActive)
 	{
-		gfx.drawCircle(int(pos.x), int(pos.y), int(halfLength), int(halfLength)-2, Colors::Green);
+		gfx.drawSpriteGhost(surfaceS, surfaceS.getRect(), gfx.getScreenRect(), (int)pos.x - surfaceS.getWidth()/2, (int)pos.y - surfaceS.getHeight()/2, Colors::Magenta);
 	}
+
 	shieldDisplay.draw(gfx, shieldEnergy);
 }
 
@@ -110,7 +119,7 @@ bool Rocket::fire(Keyboard & kbd, float dt, PDVec& newBullet)
 	{
 		canShoot = false;
 		fireCooldown = 0.0f;
-		newBullet.pos = pos + rotDirection;
+		newBullet.pos = pos + rotDirection*halfLength;
 		newBullet.direction = rotDirection;
 		return true;
 	}
@@ -184,6 +193,7 @@ void Rocket::init()
 	pos = Vec2(400, 325.0f);
 	rotDirection = Vec2(0, 0);
 	moveVector = Vec2(0, 0);
+	engineOn = false;
 }
 
 bool Rocket::stopMovement(float dt)

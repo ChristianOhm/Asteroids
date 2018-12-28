@@ -62,6 +62,7 @@ public:
 		PutPixel( x,y,{ unsigned char( r ),unsigned char( g ),unsigned char( b ) } );
 	}
 	void PutPixel( int x,int y,Color c );
+	Color GetPixel(int x, int y) const;
 	~Graphics();
 	void drawCircle(int xPos, int yPos, int outerRadius, int innerRadius, Color c);
 	void DrawRect(int x0, int y0, int x1, int y1, Color c);
@@ -78,6 +79,7 @@ public:
 	void drawSprite(const Surface& surface, const Color& substitute, int x, int y, Color chroma = Colors::Magenta);
 	void drawSprite(const Surface& surface, const Color& substitute, RectI sourceRect, int x, int y, Color chroma = Colors::Magenta);
 	void drawSpriteRotate(const Surface& surface, RectI sourceRect, const RectI & clipRect, int x, int y, float angle, Color chroma);
+	void drawSpriteGhost(const Surface& surface, RectI sourceRect, const RectI& clipRect, int x, int y, Color chroma = Colors::Magenta);
 	RectI getScreenRect() const;
 
 private:

@@ -239,5 +239,11 @@
     <Image Include="Spaceship_29x40.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="engine24x40.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="shield50x50.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
