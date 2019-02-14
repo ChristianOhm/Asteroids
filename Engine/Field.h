@@ -3,10 +3,10 @@
 #include "Vec2.h"
 #include <random>
 #include "Graphics.h"
-#include "SoundEffect.h"
 #include "Rocket.h"
 #include <vector>
 #include "Sprites2.h"
+#include "Scorecounter.h"
 
 class Field
 {
@@ -16,22 +16,21 @@ private:
 	void doAsteroidDestruction(Asteroid& asteroid);
 	void deleteAsteroid(int index);
 	void generateNewAsteroid(Vec2& pos, Vec2& direction, Asteroid::Size size);
-	void checkAsteroidsHitpoints();
+	void checkAsteroidsHitpoints(Scorecounter& scorecounter);
 	std::random_device rd;
 	std::mt19937 rng;
 	std::uniform_real_distribution <float> angle{ 0, 359 };
 	const float  convert = 3.14159265358979f / 180.0f;
-	SoundEffect collisionSound;
-	SoundEffect wallCollideSound;
 	static constexpr float asteroidFreeZoneRadiusSq = 10000;
 	float speedModifier = 1;
 	float asteroidMinDistSq = 6724;
-	
+	int scorepoints[3] = { 10, 50, 200 };
+
 
 
 public:
 	Field(const Sprites2& sprites2);
-	void updateAsteroids(float dt);
+	void updateAsteroids(float dt, Scorecounter& scorecounter);
 	void draw(Graphics& gfx);
 	bool checkHit(Vec2& posBullet);
 	void testRocketAsteroidCollision(Rocket& rocket, Timer& timer);

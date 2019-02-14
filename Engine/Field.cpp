@@ -56,7 +56,7 @@ void Field::generateNewAsteroid(Vec2 & pos, Vec2 & direction, Asteroid::Size siz
 		sprites2, rng));
 }
 
-void Field::checkAsteroidsHitpoints()
+void Field::checkAsteroidsHitpoints(Scorecounter& scorecounter)
 {
 
 	for (int counter = 0; counter < asteroids.size(); ++counter)
@@ -64,6 +64,7 @@ void Field::checkAsteroidsHitpoints()
 		if (asteroids[counter].hitpoints <= 0)
 		{
 			doAsteroidDestruction(asteroids[counter]);
+			scorecounter.add(scorepoints[(int)asteroids[counter].size]);
 			deleteAsteroid(counter);
 		}
 	}	
@@ -72,17 +73,15 @@ void Field::checkAsteroidsHitpoints()
 Field::Field(const Sprites2& sprites2)
 	:
 	rng((rd())),
-	collisionSound({ L"sound\\Collision_0.wav", L"sound\\Collision_1.wav" }),//, L"sound\\Collision_2.wav", L"sound\\Collision_3.wav" }),
-	wallCollideSound({ L"sound\\Wall_0.wav", L"sound\\Wall_1.wav" , L"sound\\Wall_2.wav",L"sound\\Wall_3.wav" }),
 	sprites2(sprites2)
 {
 
 }
 
-void Field::updateAsteroids(float dt)
+void Field::updateAsteroids(float dt, Scorecounter& scorecounter)
 {
 
-	checkAsteroidsHitpoints();
+	checkAsteroidsHitpoints(scorecounter);
 
 	for (Asteroid& A : asteroids)
 	{
@@ -97,7 +96,6 @@ void Field::updateAsteroids(float dt)
 				if (asteroids[counter].collideAsteroid(asteroids[counter2]))
 				{
 					asteroids[counter].bounceFromAsteroid(asteroids[counter2]);
-					collisionSound.Play(rng);
 					break;
 				}
 		}

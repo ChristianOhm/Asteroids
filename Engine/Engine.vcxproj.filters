@@ -117,6 +117,9 @@
     <ClInclude Include="Font.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Scorecounter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp">
@@ -203,6 +206,9 @@
     <ClCompile Include="Font.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Scorecounter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="FramebufferPS.hlsl">
@@ -221,29 +227,40 @@
     <Image Include="Chili.ico">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Asteroids_huge.bmp">
+    <Image Include="Sprites\Aliens52x24.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Consolas13x24.bmp">
+    <Image Include="Sprites\Asteroids_huge.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Fixedsys16x28.bmp">
+    <Image Include="Sprites\Asteroids_medium.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Aliens52x24.bmp">
+    <Image Include="Sprites\Asteroids_small.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="powerUp.bmp">
+    <Image Include="Sprites\Consolas13x24.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Spaceship_29x40.bmp">
+    <Image Include="Sprites\engine24x40.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="engine24x40.bmp">
+    <Image Include="Sprites\Fixedsys16x28.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="shield50x50.bmp">
+    <Image Include="Sprites\powerUp.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Sprites\shield50x50.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Sprites\Spaceship_29x40.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Data\Story.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

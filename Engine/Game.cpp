@@ -27,7 +27,7 @@ Game::Game(MainWindow& wnd)
 	wnd(wnd),
 	gfx(wnd),
 	space(sprites2),
-	storyline("Story.txt", sprites2.smallChars, Colors::Green, RectI(20, 780, 20, 580))
+	storyline("Data/Story.txt", sprites2.smallChars, Colors::Green, RectI(20, 780, 20, 580))
 {
 	
 }
@@ -118,9 +118,10 @@ void Game::UpdateModel(float dt)
 		if (space.rocketDestroyed())
 		{
 			gameStatus = Status::lost;
+			space.gameOver = true;
 		}
 
-		else if (space.levelComplete())
+		else if (space.levelComplete(timer))
 		{
 			gameStatus = Status::levelEnding;
 		}
@@ -136,7 +137,10 @@ void Game::UpdateModel(float dt)
 			timer.init(&pauseMode, 2);
 		}
 		break;
-
+	case Status::lost:
+		space.update(wnd.kbd, dt, timer);
+		break;
+	
 	}
 
 

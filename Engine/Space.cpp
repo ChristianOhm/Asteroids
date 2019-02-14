@@ -26,44 +26,53 @@ void Space::update(Keyboard& kbd, float dt, Timer& timer)
 
 
 {
-	processPowerUpSwitches(timer);
-	PDVec newBullet({ 0,0 }, { 0,0 });
-	rocket.update(kbd, dt);
-	alien.update(field, dt, timer, rng, rocket, powerUp);
-
-	if (rocket.fire(kbd, dt, newBullet))
+	if (!gameOver)
 	{
+		processPowerUpSwitches(timer);
+		PDVec newBullet({ 0,0 }, { 0,0 });
+		rocket.update(kbd, dt);
 		
-		if (powerUpSwitches[0])
+
+		if (rocket.fire(kbd, dt, newBullet))
 		{
-			bullets.launchBullet(newBullet.rotateLeft(PowerUp::angleForPower0), Bullet::Origin::player);
-			bullets.launchBullet(newBullet.rotateRight(PowerUp::angleForPower0), Bullet::Origin::player);
-		}
 
-		else
+			if (powerUpSwitches[0])
+			{
+				bullets.launchBullet(newBullet.rotateLeft(PowerUp::angleForPower0), Bullet::Origin::player);
+				bullets.launchBullet(newBullet.rotateRight(PowerUp::angleForPower0), Bullet::Origin::player);
+			}
+
+			else
+			{
+				bullets.launchBullet(newBullet, Bullet::Origin::player);
+			}
+		}
+		if (alien.shoot(rocket.getPos(), dt, newBullet))
 		{
-			bullets.launchBullet(newBullet, Bullet::Origin::player);
-			shoot.Play();
+
+			bullets.launchBullet(newBullet, Bullet::Origin::alien);
 		}
+		field.testRocketAsteroidCollision(rocket, timer);
+		powerUp.update(dt, timer, rocket, powerUpSwitches);
 	}
-	if (alien.shoot(rocket.getPos(), dt, newBullet))
-	{
-
-		bullets.launchBullet(newBullet, Bullet::Origin::alien);
-	}
-
-	field.updateAsteroids(dt);
+	alien.update(field, dt, timer, rng, rocket, powerUp, scorecounter);
+	field.updateAsteroids(dt, scorecounter);
 	bullets.updateBullets(dt, timer, field, rocket, alien);
-	field.testRocketAsteroidCollision(rocket, timer);
-	powerUp.update(dt, timer, rocket, powerUpSwitches);
+	
 
 
 }
 	
 
-bool Space::levelComplete()
+bool Space::levelComplete(Timer& timer)
 {
-	return (field.levelComplete() && !alien.underway);
+	if (field.levelComplete() && !alien.underway)
+	{
+		timer.init(&sequenceEmergencyStop, sequenceEmergencyTime);
+		return true;
+	}
+		
+	return false;
 
 }
 
@@ -85,19 +94,19 @@ void Space::draw(Graphics & gfx)
 	}
 	powerUp.draw(gfx);
 	bullets.draw(gfx);
-	
+	scorecounter.display(gfx);
 
 }
 
 Space::Space(const Sprites2& sprites2_in)
 	:
 	rng(std::random_device()()),
-	shoot(L"Sound\\Shoot.wav"),
 	sprites2(sprites2_in),
 	field(sprites2),
 	alien(&sprites2.alien),
 	powerUp(sprites2.powerUps),
-	rocket(sprites2.rocket, sprites2.engine, sprites2.shield)
+	rocket(sprites2.rocket, sprites2.engine, sprites2.shield),
+	scorecounter(sprites2.largeChars, Vei2(700, 20), Colors::Green)
 	
 {
 	field.initLevel(rng, 1);
@@ -137,11 +146,12 @@ bool Space::endSequenceComplete(float dt, Timer& timer)
 			return true;
 		}
 	}
-	return false;
+	return sequenceEmergencyStop;
 }
 
 bool Space::rocketDestroyed()
 {
+	
 	return (rocket.getShieldEnergy() <= 0);
 }
 

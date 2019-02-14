@@ -17,7 +17,7 @@ private:
 	Vec2 rotDirection = Vec2(0,0);
 	Vec2 moveVector = Vec2(0, 0);
 	float maxSpeedSq = 200.0f * 200.0f;
-	float acceleration = 100.0f;
+	float acceleration = 150.0f;
 	float fireCooldown = 0.0f;
 	bool canShoot = true;
 	static constexpr float defaultFireDelay = 0.02;
@@ -39,7 +39,7 @@ private:
 	public:
 		void draw(Graphics& gfx, int energy);
 		Vec2 upperLeftCorner = { 20,20 };
-		static constexpr int pixelsPerEnergy = 7;
+		static constexpr int pixelsPerEnergy = 6;
 		static constexpr Color color = Colors::Green;
 		static constexpr int height = 20;
 		

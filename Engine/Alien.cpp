@@ -106,11 +106,12 @@ bool Alien::checkBulletHit(Vec2 & posBullet)
 	return false;
 }
 
-void Alien::checkHitpoints(PowerUp & powerUp, Timer & timer, std::mt19937 & rng)
+void Alien::checkHitpoints(PowerUp & powerUp, Timer & timer, std::mt19937 & rng, Scorecounter& scorecounter)
 {
 	if (hitpoints <= 0)
 	{
 		underway = false;
+		scorecounter.add(1500);
 		powerUp.spawn(pos, timer, rng);
 	}
 }
@@ -123,7 +124,7 @@ void Alien::setSpawnTime(float newSpawnTime)
 }
 
 
-void Alien::update(Field & field, float dt, Timer & timer, std::mt19937 & rng, Rocket& rocket, PowerUp& powerUp)
+void Alien::update(Field & field, float dt, Timer & timer, std::mt19937 & rng, Rocket& rocket, PowerUp& powerUp, Scorecounter& scorecounter)
 {
 	if (underway)
 	{
@@ -141,7 +142,7 @@ void Alien::update(Field & field, float dt, Timer & timer, std::mt19937 & rng, R
 			rocket.takingDamage(damageOnHit, timer);
 		}
 
-		checkHitpoints(powerUp, timer, rng);
+		checkHitpoints(powerUp, timer, rng, scorecounter);
 	}
 
 	else if (testSpawn(dt))

@@ -156,6 +156,7 @@
     <ClInclude Include="PowerUp.h" />
     <ClInclude Include="RectI.h" />
     <ClInclude Include="Rocket.h" />
+    <ClInclude Include="Scorecounter.h" />
     <ClInclude Include="Scrolltext.h" />
     <ClInclude Include="Space.h" />
     <ClInclude Include="Keyboard.h" />
@@ -191,6 +192,7 @@
     <ClCompile Include="PowerUp.cpp" />
     <ClCompile Include="RectI.cpp" />
     <ClCompile Include="Rocket.cpp" />
+    <ClCompile Include="Scorecounter.cpp" />
     <ClCompile Include="Scrolltext.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Space.cpp" />
@@ -266,15 +268,20 @@
     <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Aliens52x24.bmp" />
-    <Image Include="Asteroids_huge.bmp" />
     <Image Include="Chili.ico" />
-    <Image Include="Consolas13x24.bmp" />
-    <Image Include="engine24x40.bmp" />
-    <Image Include="Fixedsys16x28.bmp" />
-    <Image Include="powerUp.bmp" />
-    <Image Include="shield50x50.bmp" />
-    <Image Include="Spaceship_29x40.bmp" />
+    <Image Include="Sprites\Aliens52x24.bmp" />
+    <Image Include="Sprites\Asteroids_huge.bmp" />
+    <Image Include="Sprites\Asteroids_medium.bmp" />
+    <Image Include="Sprites\Asteroids_small.bmp" />
+    <Image Include="Sprites\Consolas13x24.bmp" />
+    <Image Include="Sprites\engine24x40.bmp" />
+    <Image Include="Sprites\Fixedsys16x28.bmp" />
+    <Image Include="Sprites\powerUp.bmp" />
+    <Image Include="Sprites\shield50x50.bmp" />
+    <Image Include="Sprites\Spaceship_29x40.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Data\Story.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

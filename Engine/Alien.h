@@ -9,6 +9,7 @@
 #include "PowerUp.h"
 #include "Surface.h"
 #include"Animation.h"
+#include "Scorecounter.h"
 
 
 class Alien
@@ -47,8 +48,8 @@ public:
 	int hitpoints;
 	
 	bool checkBulletHit(Vec2& posBulet);
-	void checkHitpoints(PowerUp& powerUp, Timer& timer, std::mt19937 & rng);
+	void checkHitpoints(PowerUp& powerUp, Timer& timer, std::mt19937 & rng, Scorecounter& scorecounter);
 	void setSpawnTime(float newSpawnTime);
-	void update(Field& field, float dt, Timer& timer, std::mt19937& rng, Rocket& rocket, PowerUp& powerUp);
+	void update(Field& field, float dt, Timer& timer, std::mt19937& rng, Rocket& rocket, PowerUp& powerUp, Scorecounter& scorecounter);
 	bool shoot(const Vec2 target, const float dt, PDVec& bulletPD );
 };

@@ -2,15 +2,15 @@
 
 Sprites2::Sprites2()
 	:
-	asteroid_huge("Asteroids_huge.bmp"),
-	asteroid_medium("Asteroids_medium.bmp"),
-	asteroid_small("Asteroids_small.bmp"),
-	smallChars("Consolas13x24.bmp", Colors::White),
-	largeChars("Fixedsys16x28.bmp", Colors::White),
-	alien("Aliens52x24.bmp"),
-	powerUps("powerUp.bmp"),
-	rocket("Spaceship_29x40.bmp"),
-	engine("engine24x40.bmp"),
-	shield("shield50x50.bmp")
+	asteroid_huge("Sprites/Asteroids_huge.bmp"),
+	asteroid_medium("Sprites/Asteroids_medium.bmp"),
+	asteroid_small("Sprites/Asteroids_small.bmp"),
+	smallChars("Sprites/Consolas13x24.bmp", Colors::White),
+	largeChars("Sprites/Fixedsys16x28.bmp", Colors::White),
+	alien("Sprites/Aliens52x24.bmp"),
+	powerUps("Sprites/powerUp.bmp"),
+	rocket("Sprites/Spaceship_29x40.bmp"),
+	engine("Sprites/engine24x40.bmp"),
+	shield("Sprites/shield50x50.bmp")
 {
 }

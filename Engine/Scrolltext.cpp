@@ -1,4 +1,4 @@
-#include "Scrolltext.h"
+ #include "Scrolltext.h"
 #include <algorithm>
 
 Scrolltext::Scrolltext(const std::string filename_in, const Font & font_in, const Color color_in, const RectI window_in)
