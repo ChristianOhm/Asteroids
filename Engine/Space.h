@@ -18,6 +18,7 @@
 #include "Scorecounter.h"
 
 
+
 class Space
 {
 private:
@@ -48,6 +49,7 @@ private:
 
 public:
 	void update(Keyboard& kbd, float dt, Timer& timer);
+	void update(float dt, Timer& timer);
 	bool levelComplete(Timer& timer);
 	void initLevel(int level, Timer& timer);
 	void draw(Graphics& gfx);
@@ -55,4 +57,6 @@ public:
 	bool endSequenceComplete(float dt, Timer& timer);
 	bool rocketDestroyed();
 	bool gameOver = false;
+	int getScore() const;
+	
 };

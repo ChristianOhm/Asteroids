@@ -27,9 +27,9 @@ Game::Game(MainWindow& wnd)
 	wnd(wnd),
 	gfx(wnd),
 	space(sprites2),
-	storyline("Data/Story.txt", sprites2.smallChars, Colors::Green, RectI(20, 780, 20, 580))
-{
-	
+	storyline("Data/Story.txt", sprites2.smallChars, Colors::Green, RectI(20, 780, 20, 580)),
+	highscores(sprites2.largeChars)
+{	
 }
 	
 
@@ -80,12 +80,23 @@ void Game::ComposeFrame()
 		break;
 		}
 		
-
 	case Status::lost:
 		{
 		std::string lostText = "Game Over!";
 		space.draw(gfx);
 		sprites2.largeChars.printText(lostText, Vei2(320.0f, 286.0f), gfx, Colors::Green);
+		break;
+		}
+
+	case Status::highscores_enter:
+		{
+		space.draw(gfx);
+		highscores.display(gfx);
+		}
+	case Status::highscores_show:
+		{
+		space.draw(gfx);
+		highscores.display(gfx);
 		}
 		
 	}
@@ -118,6 +129,7 @@ void Game::UpdateModel(float dt)
 		if (space.rocketDestroyed())
 		{
 			gameStatus = Status::lost;
+			timer.init(&lostTimerOver, 3);
 			space.gameOver = true;
 		}
 
@@ -130,6 +142,7 @@ void Game::UpdateModel(float dt)
 	case Status::levelEnding:
 		if (space.endSequenceComplete(dt, timer))
 		{
+		
 			gameStatus = Status::pause;
 			++currentLevel;
 			space.initLevel(currentLevel, timer);
@@ -137,11 +150,43 @@ void Game::UpdateModel(float dt)
 			timer.init(&pauseMode, 2);
 		}
 		break;
+
 	case Status::lost:
 		space.update(wnd.kbd, dt, timer);
+		if (lostTimerOver)
+		{
+			if (highscores.checkNew(space.getScore()))
+			{
+				gameStatus = Status::highscores_enter;
+				highscores.add(currentLevel, space.getScore());
+				wnd.kbd.FlushChar();
+
+			}
+			else
+			{
+				gameStatus = Status::highscores_show;
+			}
+		}
+		break;
+	case Status::highscores_enter:
+		space.update(dt, timer);
+	
+		if (highscores.addNametoNew(wnd.kbd.ReadChar()))
+		{
+			highscores.save();
+			gameStatus = Status::highscores_show;
+		}
 		break;
 	
+	case Status::highscores_show:
+		space.update(dt, timer);
+		break;
+	
+
+
 	}
+	
+
 
 
 

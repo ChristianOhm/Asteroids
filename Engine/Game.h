@@ -37,6 +37,8 @@
 #include"Sprites2.h"
 #include "Scrolltext.h"
 #include <string>
+#include "Highscores.h"
+
 
 
 class Game
@@ -55,7 +57,9 @@ private:
 		levelRunning,
 		pause,
 		levelEnding,
-		lost
+		lost,
+		highscores_enter,
+		highscores_show
 	};
 
 	/********************************/
@@ -72,8 +76,8 @@ private:
 	bool pauseMode = true;
 	Status gameStatus = Status::introShowing;
 	int currentLevel = 1;
-	
-
+	Highscores highscores;
+	bool lostTimerOver = false;
 	/********************************/
 	/*  User Variables              */
 	/********************************/

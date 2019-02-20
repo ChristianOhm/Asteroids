@@ -26,41 +26,46 @@ void Space::update(Keyboard& kbd, float dt, Timer& timer)
 
 
 {
-	if (!gameOver)
-	{
-		processPowerUpSwitches(timer);
-		PDVec newBullet({ 0,0 }, { 0,0 });
-		rocket.update(kbd, dt);
+
+	processPowerUpSwitches(timer);
+	PDVec newBullet({ 0,0 }, { 0,0 });
+	rocket.update(kbd, dt);
 		
 
-		if (rocket.fire(kbd, dt, newBullet))
+	if (rocket.fire(kbd, dt, newBullet))
+	{
+
+		if (powerUpSwitches[0])
 		{
-
-			if (powerUpSwitches[0])
-			{
-				bullets.launchBullet(newBullet.rotateLeft(PowerUp::angleForPower0), Bullet::Origin::player);
-				bullets.launchBullet(newBullet.rotateRight(PowerUp::angleForPower0), Bullet::Origin::player);
-			}
-
-			else
-			{
-				bullets.launchBullet(newBullet, Bullet::Origin::player);
-			}
+			bullets.launchBullet(newBullet.rotateLeft(PowerUp::angleForPower0), Bullet::Origin::player);
+			bullets.launchBullet(newBullet.rotateRight(PowerUp::angleForPower0), Bullet::Origin::player);
 		}
-		if (alien.shoot(rocket.getPos(), dt, newBullet))
+
+		else
 		{
-
-			bullets.launchBullet(newBullet, Bullet::Origin::alien);
+			bullets.launchBullet(newBullet, Bullet::Origin::player);
 		}
-		field.testRocketAsteroidCollision(rocket, timer);
-		powerUp.update(dt, timer, rocket, powerUpSwitches);
 	}
+	if (alien.shoot(rocket.getPos(), dt, newBullet))
+	{
+
+		bullets.launchBullet(newBullet, Bullet::Origin::alien);
+	}
+	field.testRocketAsteroidCollision(rocket, timer);
+	powerUp.update(dt, timer, rocket, powerUpSwitches);
 	alien.update(field, dt, timer, rng, rocket, powerUp, scorecounter);
 	field.updateAsteroids(dt, scorecounter);
 	bullets.updateBullets(dt, timer, field, rocket, alien);
 	
 
 
+}
+
+void Space::update(float dt, Timer& timer)
+{
+	alien.update(field, dt, timer, rng, rocket, powerUp, scorecounter);
+	field.updateAsteroids(dt, scorecounter);
+	bullets.updateBullets(dt, timer, field, rocket, alien);
 }
 	
 
@@ -85,16 +90,28 @@ void Space::initLevel(int currentLevel, Timer& timer)
 
 void Space::draw(Graphics & gfx)
 {
-
-	field.draw(gfx);
-	rocket.draw(gfx);
-	if (alien.underway)
+	if (!gameOver)
 	{
-		alien.draw(gfx);
+		field.draw(gfx);
+		rocket.draw(gfx);
+		if (alien.underway)
+		{
+			alien.draw(gfx);
+		}
+		powerUp.draw(gfx);
+		bullets.draw(gfx);
+		scorecounter.display(gfx);
 	}
-	powerUp.draw(gfx);
-	bullets.draw(gfx);
-	scorecounter.display(gfx);
+	else
+	{
+		field.draw(gfx);
+		if (alien.underway)
+		{
+			alien.draw(gfx);
+		}
+	
+	}
+
 
 }
 
@@ -107,7 +124,7 @@ Space::Space(const Sprites2& sprites2_in)
 	powerUp(sprites2.powerUps),
 	rocket(sprites2.rocket, sprites2.engine, sprites2.shield),
 	scorecounter(sprites2.largeChars, Vei2(700, 20), Colors::Green)
-	
+
 {
 	field.initLevel(rng, 1);
 	for (int counter = 0; counter < PowerUp::nPowers; ++counter)
@@ -143,6 +160,8 @@ bool Space::endSequenceComplete(float dt, Timer& timer)
 		if (rocket.flyToLeft())
 		{
 			stageLevelEnd = StageLevelEnd::stop;
+			timer.terminate(&sequenceEmergencyStop);
+			sequenceEmergencyStop = false;
 			return true;
 		}
 	}
@@ -151,8 +170,12 @@ bool Space::endSequenceComplete(float dt, Timer& timer)
 
 bool Space::rocketDestroyed()
 {
-	
 	return (rocket.getShieldEnergy() <= 0);
+}
+
+int Space::getScore() const
+{
+	return scorecounter.get();
 }
 
 

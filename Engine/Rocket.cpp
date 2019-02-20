@@ -25,19 +25,16 @@ Rocket::Rocket(const Surface & surfaceR, const Surface& surfaceE, const Surface&
 void Rocket::draw(Graphics & gfx)
 {
 	
-	if (shieldEnergy > 0)
+	gfx.drawSpriteRotate(surfaceR, surfaceR.getRect(), gfx.getScreenRect(), pos.x, pos.y, angle, Colors::Magenta);
+	if (engineOn)
 	{
-		gfx.drawSpriteRotate(surfaceR, surfaceR.getRect(), gfx.getScreenRect(), pos.x, pos.y, angle, Colors::Magenta);
-		if (engineOn)
-		{
-			Vec2 posE = pos - rotDirection * 40;
-			gfx.drawSpriteRotate(surfaceE, surfaceE.getRect(), gfx.getScreenRect(), posE.x, posE.y, angle, Colors::Magenta);
-		}
+		Vec2 posE = pos - rotDirection * 40;
+		gfx.drawSpriteRotate(surfaceE, surfaceE.getRect(), gfx.getScreenRect(), posE.x, posE.y, angle, Colors::Magenta);
+	}
 
-		if (shieldActive)
-		{
-			gfx.drawSpriteGhost(surfaceS, surfaceS.getRect(), gfx.getScreenRect(), (int)pos.x - surfaceS.getWidth() / 2, (int)pos.y - surfaceS.getHeight() / 2, Colors::Magenta);
-		}
+	if (shieldActive)
+	{
+		gfx.drawSpriteGhost(surfaceS, surfaceS.getRect(), gfx.getScreenRect(), (int)pos.x - surfaceS.getWidth() / 2, (int)pos.y - surfaceS.getHeight() / 2, Colors::Magenta);
 	}
 
 	
