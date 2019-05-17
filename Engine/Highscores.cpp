@@ -13,7 +13,7 @@ void Highscores::add(int currentStage, int currentScore)
 		}
 	}
 	newEntry = entries.insert(i, Entry("", currentStage, currentScore));
-
+	newHighscoreEntered = true;
 	if (entries.size() > 10)
 	{
 		entries.resize(10);
@@ -42,9 +42,9 @@ void Highscores::display(Graphics & gfx)
 	font.printText("STAGE", pos + Vei2(308, 0), gfx, color);
 	font.printText("SCORE", pos + Vei2(424, 0), gfx, color);
 	pos += Vei2(0, 60);
-	for (auto s = entries.begin(), e = entries.end(); s != e; ++s )
+	for (std::vector<Entry>::iterator s = entries.begin(), e = entries.end(); s != e; ++s )
 	{
-		if (s == newEntry)
+		if (newHighscoreEntered && s == newEntry)
 		{
 			font.printText(s->name, pos, gfx, highlight);
 			font.printText(std::to_string(s->stage), pos + Vei2(340, 0), gfx, highlight);

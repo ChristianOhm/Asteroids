@@ -15,6 +15,8 @@ private:
 	const Color color = Colors::Green;
 	const Color highlight = Colors::MakeRGB(225u, 255u, 180u);
 	static constexpr int maxCharName = 15;
+	bool newHighscoreEntered = false;
+
 	class Entry
 	{
 	public:
@@ -35,7 +37,8 @@ private:
 		}
 	};
 	std::vector<Entry> entries;
-	std::vector<Entry>::iterator newEntry = entries.end();
+	
+	std::vector<Entry>::iterator newEntry;
 
 public:
 	Highscores(const Font& font_in);
