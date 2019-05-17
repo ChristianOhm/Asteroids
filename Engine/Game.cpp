@@ -28,6 +28,7 @@ Game::Game(MainWindow& wnd)
 	gfx(wnd),
 	space(sprites2),
 	storyline("Data/Story.txt", sprites2.smallChars, Colors::Green, RectI(20, 780, 20, 580)),
+	ending("Data/Ending.txt", sprites2.smallChars, Colors::Green, RectI(20, 780, 20, 580)),
 	highscores(sprites2.largeChars)
 {	
 }
@@ -62,12 +63,20 @@ void Game::ComposeFrame()
 	case Status::pause:
 		{
 		space.draw(gfx);
-		std::string pauseText = " Stage " + std::to_string(currentLevel) + "\n\nGet Ready!";
+		std::string pauseText;
+		if (currentLevel < maxLevel)
+		{
+			pauseText = " Stage " + std::to_string(currentLevel) + "\n\nGet Ready!";
+		}
+		else
+		{
+			pauseText = "Final Stage \n\n Get Ready!";
+		}
+
 		sprites2.largeChars.printText(pauseText, Vei2(320.0f, 286.0f), gfx, Colors::Green);
 		break;
 		}
 		
-
 	case Status::levelRunning:
 		space.draw(gfx);
 		break;
@@ -87,6 +96,10 @@ void Game::ComposeFrame()
 		sprites2.largeChars.printText(lostText, Vei2(320.0f, 286.0f), gfx, Colors::Green);
 		break;
 		}
+
+	case Status::endingShowing:
+		ending.draw(gfx);
+		break;
 
 	case Status::highscores_enter:
 		{
@@ -142,12 +155,20 @@ void Game::UpdateModel(float dt)
 	case Status::levelEnding:
 		if (space.endSequenceComplete(dt, timer))
 		{
-		
-			gameStatus = Status::pause;
 			++currentLevel;
-			space.initLevel(currentLevel, timer);
-			pauseMode = true;
-			timer.init(&pauseMode, 2);
+			if (currentLevel > maxLevel)
+			{
+				space.gameOver = true;
+				gameStatus = Status::endingShowing;
+			}
+			else
+			{
+				gameStatus = Status::pause;
+				space.initLevel(currentLevel, timer);
+				pauseMode = true;
+				timer.init(&pauseMode, 2);
+			}
+		
 		}
 		break;
 
@@ -168,6 +189,26 @@ void Game::UpdateModel(float dt)
 			}
 		}
 		break;
+
+
+	case Status::endingShowing:
+		ending.update(dt);
+		if (wnd.kbd.KeyIsPressed(VK_SPACE))
+		{
+			if (highscores.checkNew(space.getScore()))
+			{
+				gameStatus = Status::highscores_enter;
+				highscores.add(currentLevel, space.getScore());
+				wnd.kbd.FlushChar();
+
+			}
+			else
+			{
+				gameStatus = Status::highscores_show;
+			}
+		}
+		break;
+
 	case Status::highscores_enter:
 		space.update(dt, timer);
 	

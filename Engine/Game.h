@@ -59,7 +59,9 @@ private:
 		levelEnding,
 		lost,
 		highscores_enter,
-		highscores_show
+		highscores_show,
+		won,
+		endingShowing
 	};
 
 	/********************************/
@@ -73,9 +75,11 @@ private:
 	Space space;
 	Timer timer;
 	Scrolltext storyline;
+	Scrolltext ending;
 	bool pauseMode = true;
 	Status gameStatus = Status::introShowing;
 	int currentLevel = 1;
+	static constexpr int maxLevel = 7;
 	Highscores highscores;
 	bool lostTimerOver = false;
 	/********************************/
